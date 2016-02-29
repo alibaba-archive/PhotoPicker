@@ -18,6 +18,7 @@ public class PhotoPickerController: UIViewController {
     public var minimumNumberOfSelection: Int = 1
     public var maximumNumberOfSelection: Int = 9
     public var mediaType: PhotoPickerMediaType = .Any
+    public var prompt: String?
     
     //MARK: - private property
     private var albumsNavigationController: UINavigationController!

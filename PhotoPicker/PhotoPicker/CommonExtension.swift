@@ -13,3 +13,16 @@ extension CGSize {
         return CGSize(width: self.width * scale, height: self.height * scale)
     }
 }
+
+extension UICollectionView {
+    func pp_indexPathsForElementsInRect(rect: CGRect) -> [NSIndexPath]? {
+        let allLayoutAttributes = self.collectionViewLayout.layoutAttributesForElementsInRect(rect)
+        guard let attributes = allLayoutAttributes where attributes.count > 0 else { return nil }
+        var indexPaths: [NSIndexPath] = []
+        for layoutAttributes in attributes {
+            let indexPath = layoutAttributes.indexPath
+            indexPaths.append(indexPath)
+        }
+        return indexPaths
+    }
+}

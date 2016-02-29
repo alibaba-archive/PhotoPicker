@@ -20,8 +20,16 @@ class AlbumsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.rowHeight = 86.0
         loadAlbums()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationItem.title = "Photo"
+        navigationItem.prompt = photoPickerController.prompt
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,9 +48,13 @@ class AlbumsViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("AlbumCell", forIndexPath: indexPath) as! AlbumCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(albumCellIdentifier, forIndexPath: indexPath) as! AlbumCell
         fillCell(cell, forIndexPath: indexPath)
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 
     /*
@@ -80,15 +92,15 @@ class AlbumsViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if let assetsViewController = segue.destinationViewController as? AssetsViewController {
+            assetsViewController.photoPickerController = photoPickerController
+            assetsViewController.assetCollection = assetCollections[tableView.indexPathForSelectedRow!.row]
+        }
     }
-    */
 }
 
 //MARK: - help method
