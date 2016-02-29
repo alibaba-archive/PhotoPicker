@@ -26,10 +26,13 @@ class AssetsViewController: UICollectionViewController {
     private var previousPreheatRect: CGRect = CGRectZero
     private var assetsFetchResults: PHFetchResult!
     private var lastSelectItemIndexPath: NSIndexPath?
+    private var toolbarNumberView: ToolBarNumberView!
+    private var sendBarItem: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupToolBar()
         resetCachedAssets()
     }
     
@@ -59,8 +62,16 @@ class AssetsViewController: UICollectionViewController {
         updateCachedAssets()
     }
     
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        guard let collectionView = collectionView else { return }
+        collectionViewLayout.invalidateLayout()
+        if let indexPath = collectionView.indexPathsForVisibleItems().last {
+            coordinator.animateAlongsideTransition(nil, completion: { (context) -> Void in
+               collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: false)
+            })
+        }
+    }
     
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -77,7 +88,6 @@ class AssetsViewController: UICollectionViewController {
     */
 
     // MARK: UICollectionViewDataSource
-
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -111,14 +121,6 @@ class AssetsViewController: UICollectionViewController {
     }
 
     // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-    
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         guard let asset = assetsFetchResults[indexPath.item] as? PHAsset else { return }
         
@@ -136,6 +138,7 @@ class AssetsViewController: UICollectionViewController {
             photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: selectedAssets)
         }
         
+        updateToolBar()
         photoPickerController.delegate?.photoPickerController(photoPickerController, didSelectAsset: asset)
     }
     
@@ -146,6 +149,7 @@ class AssetsViewController: UICollectionViewController {
             selectedAssets.removeAtIndex(index)
             lastSelectItemIndexPath = nil
             
+            updateToolBar()
             photoPickerController.delegate?.photoPickerController(photoPickerController, didDeselectAsset: asset)
         }
     }
@@ -167,22 +171,40 @@ class AssetsViewController: UICollectionViewController {
             return false
         }
     }
+}
 
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
+//MARK: - response method
+extension AssetsViewController {
+    func sendButtonTapped() {
+        guard selectedAssets.count > 0 else { return }
+        photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: selectedAssets)
     }
-
-    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
     
+    @IBAction func cancelButtonTapped(sender: UIBarButtonItem) {
+        photoPickerController.delegate?.photoPickerControllerDidCancel(photoPickerController)
     }
-    */
+}
 
+//MARK: - UI help method
+extension AssetsViewController {
+    func setupToolBar() {
+        guard photoPickerController.allowMultipleSelection else { return }
+        toolbarNumberView = ToolBarNumberView(frame: CGRect(origin: CGPointZero, size: CGSize(width: 21.0, height: 21.0)))
+        
+        sendBarItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendButtonTapped")
+        sendBarItem.enabled = false
+        let numberBarItem = UIBarButtonItem(customView: toolbarNumberView)
+        let leftSpace = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+        toolbarItems = [leftSpace, numberBarItem, sendBarItem]
+        
+        navigationController?.toolbar.tintColor = toolBarTintColor
+        navigationController?.setToolbarHidden(false, animated: true)
+    }
+    
+    func updateToolBar() {
+        sendBarItem.enabled = (selectedAssets.count != 0)
+        toolbarNumberView.number = selectedAssets.count
+    }
 }
 
 //MARK: - collection view help method

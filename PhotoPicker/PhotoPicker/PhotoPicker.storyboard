@@ -6,7 +6,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Root View Controller-->
+        <!--Photos-->
         <scene sceneID="bbg-5s-j6D">
             <objects>
                 <tableViewController storyboardIdentifier="AlbumsViewController" id="4R6-ur-g33" customClass="AlbumsViewController" customModule="PhotoPicker" customModuleProvider="target" sceneMemberID="viewController">
@@ -98,13 +98,19 @@
                             <outlet property="delegate" destination="4R6-ur-g33" id="dWf-4f-8WO"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="uAv-GJ-OhD"/>
+                    <navigationItem key="navigationItem" title="Photos" id="uAv-GJ-OhD">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="cancel" id="eeH-Nj-5v4">
+                            <connections>
+                                <action selector="cancelButtonTapped:" destination="4R6-ur-g33" id="tkD-II-N7J"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nsv-gx-G7M" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="774" y="387"/>
         </scene>
-        <!--Assets View Controller-->
+        <!--Album Title-->
         <scene sceneID="QXS-gU-i9A">
             <objects>
                 <collectionViewController id="ghK-eu-dfl" customClass="AssetsViewController" customModule="PhotoPicker" customModuleProvider="target" sceneMemberID="viewController">
@@ -133,7 +139,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="78" height="78"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark_unselected" translatesAutoresizingMaskIntoConstraints="NO" id="5Wg-fA-8qV">
-                                                    <rect key="frame" x="50" y="50" width="24" height="24"/>
+                                                    <rect key="frame" x="50" y="4" width="24" height="24"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="24" id="4wB-jI-HQx"/>
                                                         <constraint firstAttribute="height" constant="24" id="GTk-uk-OYO"/>
@@ -143,7 +149,7 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="5Wg-fA-8qV" secondAttribute="trailing" constant="4" id="Ebx-iE-cM7"/>
-                                                <constraint firstAttribute="bottom" secondItem="5Wg-fA-8qV" secondAttribute="bottom" constant="4" id="tdh-rv-XmY"/>
+                                                <constraint firstItem="5Wg-fA-8qV" firstAttribute="top" secondItem="pNO-2d-B21" secondAttribute="top" constant="4" id="gGA-0L-ucx"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -188,6 +194,13 @@
                             <outlet property="delegate" destination="ghK-eu-dfl" id="akP-8K-CmZ"/>
                         </connections>
                     </collectionView>
+                    <navigationItem key="navigationItem" title="Album Title" id="pVL-HE-J51">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="cancel" id="RIx-S0-76c">
+                            <connections>
+                                <action selector="cancelButtonTapped:" destination="ghK-eu-dfl" id="tus-fk-CHt"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ha-EI-LI8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

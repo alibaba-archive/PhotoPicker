@@ -13,12 +13,13 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let photoPickerController = PhotoPickerController()
-        photoPickerController.delegate = self
-        photoPickerController.maximumNumberOfSelection = 1
-        self.presentViewController(photoPickerController, animated: true, completion: nil)
     }
 
+    @IBAction func showButtonTapped(sender: UIButton) {
+        let photoPickerController = PhotoPickerController()
+        photoPickerController.delegate = self
+        self.presentViewController(photoPickerController, animated: true, completion: nil)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -26,6 +27,8 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: PhotoPickerDelegate {
-    
+    func photoPickerControllerDidCancel(controller: PhotoPickerController) {
+        navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
 }
 

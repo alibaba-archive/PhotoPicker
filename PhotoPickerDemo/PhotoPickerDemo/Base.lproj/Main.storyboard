@@ -16,13 +16,26 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LES-Bh-v0K">
+                                <rect key="frame" x="237.5" y="285" width="125" height="30"/>
+                                <state key="normal" title="Show PhotoPicker"/>
+                                <connections>
+                                    <action selector="showButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kLc-x7-GnV"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="LES-Bh-v0K" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="gZQ-ng-Zdi"/>
+                            <constraint firstItem="LES-Bh-v0K" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="oh9-JS-Hff"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="f6I-ZB-Fbm"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1220" y="329"/>
+            <point key="canvasLocation" x="1040" y="-363"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="QUq-6C-C0p">
