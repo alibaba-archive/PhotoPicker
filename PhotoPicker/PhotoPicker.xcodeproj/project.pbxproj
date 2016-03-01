@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB15452E1C856C920055715B /* ToolBarHighQualityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB15452D1C856C920055715B /* ToolBarHighQualityButton.swift */; };
 		EB3E4A611C8031D800175777 /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E4A601C8031D800175777 /* AssetCell.swift */; };
 		EB3E4A651C8036E200175777 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E4A641C8036E200175777 /* AssetsViewController.swift */; };
 		EB48DC301C7F0EB3009F5898 /* CommonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB48DC2F1C7F0EB3009F5898 /* CommonExtension.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EB15452D1C856C920055715B /* ToolBarHighQualityButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolBarHighQualityButton.swift; sourceTree = "<group>"; };
 		EB3E4A601C8031D800175777 /* AssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
 		EB3E4A641C8036E200175777 /* AssetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetsViewController.swift; sourceTree = "<group>"; };
 		EB48DC2F1C7F0EB3009F5898 /* CommonExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonExtension.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				EBA70B081C7ED6D60089ECD7 /* AlbumCell.swift */,
 				EB3E4A601C8031D800175777 /* AssetCell.swift */,
 				EBCD67331C843E8600146FDB /* ToolBarNumberView.swift */,
+				EB15452D1C856C920055715B /* ToolBarHighQualityButton.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -202,6 +205,7 @@
 				EBA70B0D1C7ED91E0089ECD7 /* PhotoPickerController.swift in Sources */,
 				EBA70B091C7ED6D60089ECD7 /* AlbumCell.swift in Sources */,
 				EBA70B101C7EDB3F0089ECD7 /* PhotoPickerProtocol.swift in Sources */,
+				EB15452E1C856C920055715B /* ToolBarHighQualityButton.swift in Sources */,
 				EBA70B0B1C7ED8030089ECD7 /* constant.swift in Sources */,
 				EB48DC301C7F0EB3009F5898 /* CommonExtension.swift in Sources */,
 				EBA70B121C7EE1580089ECD7 /* AlbumsViewController.swift in Sources */,

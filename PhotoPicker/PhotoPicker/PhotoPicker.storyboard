@@ -99,7 +99,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Photos" id="uAv-GJ-OhD">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="cancel" id="eeH-Nj-5v4">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="eeH-Nj-5v4">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="4R6-ur-g33" id="tkD-II-N7J"/>
                             </connections>
@@ -195,7 +195,7 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="Album Title" id="pVL-HE-J51">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="cancel" id="RIx-S0-76c">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="RIx-S0-76c">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="ghK-eu-dfl" id="tus-fk-CHt"/>
                             </connections>

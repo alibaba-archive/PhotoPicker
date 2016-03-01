@@ -8,6 +8,7 @@
 
 import UIKit
 import PhotoPicker
+import Photos
 
 class ViewController: UIViewController {
 
@@ -22,13 +23,24 @@ class ViewController: UIViewController {
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
 
 extension ViewController: PhotoPickerDelegate {
     func photoPickerControllerDidCancel(controller: PhotoPickerController) {
         navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func photoPickerController(controller: PhotoPickerController, didFinishPickingAssets assets: [PHAsset]) {
+        navigationController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+            let alertController = UIAlertController(title: nil, message: "你已经选择了\(assets.count)张照片", preferredStyle: .Alert)
+            let cancelAction = UIAlertAction(title: "OK", style: .Default) { (action) -> Void in
+                alertController.dismissViewControllerAnimated(true, completion: nil)
+            }
+            alertController.addAction(cancelAction)
+            
+           self.navigationController?.presentViewController(alertController, animated: true, completion: nil)
+        })
     }
 }
 

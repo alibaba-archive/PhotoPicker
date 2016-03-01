@@ -9,11 +9,15 @@
 import UIKit
 
 let toolBarTintColor: UIColor = UIColor(red: 3/255.0, green: 169/255.0, blue: 244/255.0, alpha: 1.0)
+let greyTextColor: UIColor = UIColor(red: 191/255.0, green: 191/255.0, blue: 191/255.0, alpha: 1.0)
+let blueTextColor: UIColor = UIColor(red: 3/255.0, green: 169/255.0, blue: 244/255.0, alpha: 1.0)
 let AlbumCoverBorderColor: CGColorRef = UIColor.whiteColor().CGColor
 let currentBundle: NSBundle = NSBundle(forClass: PhotoPickerController.self)
 let selectedCheckMarkImageName = "checkmark_selected"
 let unselectedCheckMarkImageName = "checkmark_unselected"
 let toolbarNumberViewBackgroundImageName = "toolbar_numberview_background"
+let toolbarHighQualityImageCheckedImageName = "toolbar_highquality_checked"
+let toolbarHighQualityImageUnCheckedImageName = "toolbar_highquality_unchecked"
 
 let assetCellIdentifier = "AssetCell"
 let albumCellIdentifier = "AlbumCell"

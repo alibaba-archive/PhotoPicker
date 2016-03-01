@@ -27,7 +27,9 @@ class AssetsViewController: UICollectionViewController {
     private var assetsFetchResults: PHFetchResult!
     private var lastSelectItemIndexPath: NSIndexPath?
     private var toolbarNumberView: ToolBarNumberView!
+    private var toolbarHighQualityButton: ToolBarHighQualityButton!
     private var sendBarItem: UIBarButtonItem!
+    private var needHighQuality: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,7 +137,7 @@ class AssetsViewController: UICollectionViewController {
             selectedAssets.append(asset)
             lastSelectItemIndexPath = indexPath
         } else {
-            photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: selectedAssets)
+            photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: [asset], needHighQualityImage: true)
         }
         
         updateToolBar()
@@ -177,7 +179,7 @@ class AssetsViewController: UICollectionViewController {
 extension AssetsViewController {
     func sendButtonTapped() {
         guard selectedAssets.count > 0 else { return }
-        photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: selectedAssets)
+        photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: selectedAssets, needHighQualityImage: toolbarHighQualityButton.checked)
     }
     
     @IBAction func cancelButtonTapped(sender: UIBarButtonItem) {
@@ -190,18 +192,21 @@ extension AssetsViewController {
     func setupToolBar() {
         guard photoPickerController.allowMultipleSelection else { return }
         toolbarNumberView = ToolBarNumberView(frame: CGRect(origin: CGPointZero, size: CGSize(width: 21.0, height: 21.0)))
+        toolbarHighQualityButton = ToolBarHighQualityButton(frame: CGRect(origin: CGPointZero, size: CGSize(width: 150, height: 21.0)))
         
         sendBarItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendButtonTapped")
         sendBarItem.enabled = false
+        let highqualityBarItem = UIBarButtonItem(customView: toolbarHighQualityButton)
         let numberBarItem = UIBarButtonItem(customView: toolbarNumberView)
         let leftSpace = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
-        toolbarItems = [leftSpace, numberBarItem, sendBarItem]
+        toolbarItems = [highqualityBarItem, leftSpace, numberBarItem, sendBarItem]
         
         navigationController?.toolbar.tintColor = toolBarTintColor
         navigationController?.setToolbarHidden(false, animated: true)
     }
     
     func updateToolBar() {
+        guard photoPickerController.allowMultipleSelection else { return }
         sendBarItem.enabled = (selectedAssets.count != 0)
         toolbarNumberView.number = selectedAssets.count
     }
@@ -215,6 +220,7 @@ extension AssetsViewController {
         let asset = assetsFetchResults[indexPath.item] as! PHAsset
         let itemSize = (collectionViewLayout as! UICollectionViewFlowLayout).itemSize
         let targetSize = itemSize.scale(traitCollection.displayScale)
+        cell.overlayView.hidden = !photoPickerController.allowMultipleSelection
         
         imageManager.requestImageForAsset(asset,
             targetSize: targetSize,
