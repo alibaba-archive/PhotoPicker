@@ -31,7 +31,7 @@ extension ViewController: PhotoPickerDelegate {
         navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func photoPickerController(controller: PhotoPickerController, didFinishPickingAssets assets: [PHAsset]) {
+    func photoPickerController(controller: PhotoPickerController, didFinishPickingAssets assets: [PHAsset], needHighQualityImage: Bool) {
         navigationController?.dismissViewControllerAnimated(true, completion: { () -> Void in
             let alertController = UIAlertController(title: nil, message: "你已经选择了\(assets.count)张照片", preferredStyle: .Alert)
             let cancelAction = UIAlertAction(title: "OK", style: .Default) { (action) -> Void in
@@ -39,7 +39,7 @@ extension ViewController: PhotoPickerDelegate {
             }
             alertController.addAction(cancelAction)
             
-           self.navigationController?.presentViewController(alertController, animated: true, completion: nil)
+            self.navigationController?.presentViewController(alertController, animated: true, completion: nil)
         })
     }
 }
