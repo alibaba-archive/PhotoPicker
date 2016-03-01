@@ -11,15 +11,35 @@ import UIKit
 let imageViewWidth: CGFloat = 18
 class ToolBarHighQualityButton: UIView {
     
+    weak var assetsViewController: AssetsViewController!
+    
     //MARK: - public property
     var checked: Bool = false {
         didSet {
             if checked {
                 imageView.image = UIImage(named: toolbarHighQualityImageCheckedImageName, inBundle: currentBundle, compatibleWithTraitCollection: nil)
                 titleLabel.textColor = blueTextColor
+                assetsViewController.updateHighQualityImageSize()
             } else {
                 imageView.image = UIImage(named: toolbarHighQualityImageUnCheckedImageName, inBundle: currentBundle, compatibleWithTraitCollection: nil)
                 titleLabel.textColor = greyTextColor
+                highqualityImageSize = 0
+            }
+        }
+    }
+    
+    var highqualityImageSize: Int = 0 {
+        didSet {
+            if highqualityImageSize == 0 {
+                titleLabel.text = "Origin"
+            } else {
+                let kb: Float = Float(highqualityImageSize) / 1024.0
+                if kb > 1024.0 {
+                    let mb: Float = kb / 1024.0
+                    titleLabel.text = "Origin(\(String(format: "%.2f", mb))M)"
+                } else {
+                    titleLabel.text = "Origin(\(String(format: "%.2f", kb))K)"
+                }
             }
         }
     }

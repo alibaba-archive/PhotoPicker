@@ -15,19 +15,21 @@ class AssetCell: UICollectionViewCell {
     @IBOutlet weak var checkMarkImageView: UIImageView!
     
     override var selected: Bool {
-        didSet {
-            checkMarkImageView.image = selected ? UIImage(named: selectedCheckMarkImageName, inBundle: currentBundle, compatibleWithTraitCollection: nil) : UIImage(named: unselectedCheckMarkImageName, inBundle: currentBundle, compatibleWithTraitCollection: nil)
-            if selected {
-                UIView.animateKeyframesWithDuration(0.33, delay: 0.0, options: [], animations: { () -> Void in
-                    UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.5, animations: { [unowned self]() -> Void in
-                        let transform = CGAffineTransformMakeScale(1.3, 1.3)
-                        self.checkMarkImageView.transform = transform
-                    })
-                    
-                    UIView.addKeyframeWithRelativeStartTime(0.5, relativeDuration: 0.5, animations: { [unowned self]() -> Void in
-                        self.checkMarkImageView.transform = CGAffineTransformIdentity
-                    })
-                    }, completion: nil)
+        willSet {
+            if !selected && newValue {
+                checkMarkImageView.image = newValue ? UIImage(named: selectedCheckMarkImageName, inBundle: currentBundle, compatibleWithTraitCollection: nil) : UIImage(named: unselectedCheckMarkImageName, inBundle: currentBundle, compatibleWithTraitCollection: nil)
+                if newValue {
+                    UIView.animateKeyframesWithDuration(0.33, delay: 0.0, options: [], animations: { () -> Void in
+                        UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.5, animations: { [unowned self]() -> Void in
+                            let transform = CGAffineTransformMakeScale(1.3, 1.3)
+                            self.checkMarkImageView.transform = transform
+                            })
+                        
+                        UIView.addKeyframeWithRelativeStartTime(0.5, relativeDuration: 0.5, animations: { [unowned self]() -> Void in
+                            self.checkMarkImageView.transform = CGAffineTransformIdentity
+                            })
+                        }, completion: nil)
+                }
             }
         }
     }

@@ -17,7 +17,7 @@ public protocol PhotoPickerDelegate: class {
 }
 
 public extension PhotoPickerDelegate {
-    func photoPickerController(controller: PhotoPickerController, didFinishPickingAssets: [PHAsset], needHighQualityImage: Bool) {
+    func photoPickerController(controller: PhotoPickerController, didFinishPickingAssets assets: [PHAsset], needHighQualityImage: Bool) {
         return
     }
     
@@ -25,16 +25,15 @@ public extension PhotoPickerDelegate {
         return
     }
     
-    func photoPickerController(controller: PhotoPickerController, shouldSelectAsset: PHAsset) -> Bool {
+    func photoPickerController(controller: PhotoPickerController, shouldSelectAsset asset: PHAsset) -> Bool {
         return true
     }
     
-    
-    func photoPickerController(controller: PhotoPickerController, didSelectAsset: PHAsset) {
+    func photoPickerController(controller: PhotoPickerController, didSelectAsset asset: PHAsset) {
         return
     }
     
-    func photoPickerController(controller: PhotoPickerController, didDeselectAsset: PHAsset) {
+    func photoPickerController(controller: PhotoPickerController, didDeselectAsset asset: PHAsset) {
         return
     }
 }
