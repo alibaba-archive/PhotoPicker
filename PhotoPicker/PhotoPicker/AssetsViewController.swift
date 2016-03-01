@@ -13,7 +13,11 @@ class AssetsViewController: UICollectionViewController {
     
     //MARK: - public property
     var photoPickerController: PhotoPickerController!
-    var selectedAssets: [PHAsset] = []
+    var selectedAssets: [PHAsset] = [] {
+        didSet {
+            updateHighQualityImageSize()
+        }
+    }
     
     var assetCollection: PHAssetCollection! {
         didSet {
@@ -137,7 +141,7 @@ class AssetsViewController: UICollectionViewController {
             selectedAssets.append(asset)
             lastSelectItemIndexPath = indexPath
         } else {
-            photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: [asset], needHighQualityImage: true)
+            photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: [asset], needHighQualityImage: toolbarHighQualityButton.checked)
         }
         
         updateToolBar()
@@ -193,6 +197,7 @@ extension AssetsViewController {
         guard photoPickerController.allowMultipleSelection else { return }
         toolbarNumberView = ToolBarNumberView(frame: CGRect(origin: CGPointZero, size: CGSize(width: 21.0, height: 21.0)))
         toolbarHighQualityButton = ToolBarHighQualityButton(frame: CGRect(origin: CGPointZero, size: CGSize(width: 150, height: 21.0)))
+        toolbarHighQualityButton.assetsViewController = self
         
         sendBarItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendButtonTapped")
         sendBarItem.enabled = false
@@ -209,6 +214,21 @@ extension AssetsViewController {
         guard photoPickerController.allowMultipleSelection else { return }
         sendBarItem.enabled = (selectedAssets.count != 0)
         toolbarNumberView.number = selectedAssets.count
+    }
+    
+    func updateHighQualityImageSize() {
+        guard toolbarHighQualityButton.checked else { return }
+        var size: Int = 0
+        selectedAssets.forEach { (asset) -> () in
+            let options = PHImageRequestOptions()
+            options.synchronous = true
+            PHImageManager.defaultManager().requestImageDataForAsset(asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) -> Void in
+                if let data = imageData {
+                    size += data.length
+                }
+            })
+        }
+        self.toolbarHighQualityButton.highqualityImageSize = size
     }
 }
 
