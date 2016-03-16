@@ -40,6 +40,11 @@ class AssetsViewController: UICollectionViewController {
         
         setupToolBar()
         resetCachedAssets()
+        PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
+    }
+    
+    deinit {
+        PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -272,9 +277,7 @@ extension AssetsViewController {
     func showMaximumSelectionReachedAlert() {
         let maximumNumberOfSelection = photoPickerController.maximumNumberOfSelection
         let alertController = UIAlertController(title: nil, message: "最多选择\(maximumNumberOfSelection)张照片", preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) -> Void in
-            alertController.dismissViewControllerAnimated(true, completion: nil)
-        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         alertController.addAction(cancelAction)
         
         navigationController?.presentViewController(alertController, animated: true, completion: nil)
@@ -423,5 +426,35 @@ extension AssetsViewController: UICollectionViewDelegateFlowLayout {
         let width: CGFloat = (CGRectGetWidth(view.frame) - 2.0 * CGFloat(numberOfColumns - 1)) / CGFloat(numberOfColumns)
         
         return CGSize(width: width, height: width)
+    }
+}
+
+extension AssetsViewController: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(changeInstance: PHChange) {
+        guard let collectionChanges = changeInstance.changeDetailsForFetchResult(self.assetsFetchResults) else { return }
+        
+        dispatch_async(dispatch_get_main_queue()) { [unowned self]() -> Void in
+            self.assetsFetchResults = collectionChanges.fetchResultAfterChanges
+            
+            if collectionChanges.hasIncrementalChanges || collectionChanges.hasMoves {
+                self.collectionView?.reloadData()
+            } else {
+                self.collectionView?.performBatchUpdates({ () -> Void in
+                    if let removedIndexes = collectionChanges.removedIndexes where removedIndexes.count > 0 {
+                        self.collectionView?.deleteItemsAtIndexPaths(removedIndexes.pp_indexPathsFromIndexesInSection(0))
+                    }
+                    
+                    if let insertedIndexes = collectionChanges.insertedIndexes where insertedIndexes.count > 0 {
+                        self.collectionView?.insertItemsAtIndexPaths(insertedIndexes.pp_indexPathsFromIndexesInSection(0))
+                    }
+                    
+                    if let changedIndexes = collectionChanges.changedIndexes where changedIndexes.count > 0 {
+                        self.collectionView?.reloadItemsAtIndexPaths(changedIndexes.pp_indexPathsFromIndexesInSection(0))
+                    }
+                    }, completion: nil)
+            }
+            
+            self.resetCachedAssets()
+        }
     }
 }

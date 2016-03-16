@@ -26,3 +26,13 @@ extension UICollectionView {
         return indexPaths
     }
 }
+
+extension NSIndexSet {
+    func pp_indexPathsFromIndexesInSection(section: Int) -> [NSIndexPath] {
+        var indexPaths: [NSIndexPath] = []
+        for (index, _) in self.enumerate() {
+            indexPaths.append(NSIndexPath(forItem: index, inSection: section))
+        }
+        return indexPaths
+    }
+}

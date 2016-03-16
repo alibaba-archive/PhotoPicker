@@ -23,6 +23,12 @@ class AlbumsViewController: UITableViewController {
         
         tableView.rowHeight = 86.0
         loadAlbums()
+        
+        PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
+    }
+    
+    deinit {
+        PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -179,5 +185,25 @@ extension AlbumsViewController {
         
         cell.titleLabel.text = assetCollection.localizedTitle
         cell.countLabel.text = "\(fetchResult.count)"
+    }
+}
+
+extension AlbumsViewController: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(changeInstance: PHChange) {
+        dispatch_async(dispatch_get_main_queue()) { [unowned self]() -> Void in
+            var changedFetchResult = self.fetchedResults
+            
+            for (index, fetchResult) in self.fetchedResults.enumerate() {
+                guard let changeDetails = changeInstance.changeDetailsForFetchResult(fetchResult) else { continue }
+                changedFetchResult[index] = changeDetails.fetchResultAfterChanges
+            }
+            
+            if self.fetchedResults != changedFetchResult {
+                self.fetchedResults = changedFetchResult
+                
+                self.processAlbums()
+                self.tableView.reloadData()
+            }
+        }
     }
 }
