@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB628E991CCF5F1B004EBB56 /* PhotoPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB628E981CCF5F1B004EBB56 /* PhotoPicker.framework */; };
+		EB628E9A1CCF5F1B004EBB56 /* PhotoPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EB628E981CCF5F1B004EBB56 /* PhotoPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EBA70AEE1C7EA94B0089ECD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA70AED1C7EA94B0089ECD7 /* AppDelegate.swift */; };
 		EBA70AF01C7EA94B0089ECD7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA70AEF1C7EA94B0089ECD7 /* ViewController.swift */; };
 		EBA70AF31C7EA94B0089ECD7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBA70AF11C7EA94B0089ECD7 /* Main.storyboard */; };
 		EBA70AF51C7EA94B0089ECD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBA70AF41C7EA94B0089ECD7 /* Assets.xcassets */; };
 		EBA70AF81C7EA94B0089ECD7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBA70AF61C7EA94B0089ECD7 /* LaunchScreen.storyboard */; };
-		EBA70B001C7EA9C00089ECD7 /* PhotoPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBA70AFF1C7EA9C00089ECD7 /* PhotoPicker.framework */; };
-		EBA70B011C7EA9C00089ECD7 /* PhotoPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EBA70AFF1C7EA9C00089ECD7 /* PhotoPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,7 +23,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				EBA70B011C7EA9C00089ECD7 /* PhotoPicker.framework in Embed Frameworks */,
+				EB628E9A1CCF5F1B004EBB56 /* PhotoPicker.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -31,6 +31,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EB628E981CCF5F1B004EBB56 /* PhotoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = PhotoPicker.framework; path = "/Users/StormXX/Library/Developer/Xcode/DerivedData/PhotoPicker-bbteokqnmyjswzdsbkhwexeojvbd/Build/Products/Debug-iphonesimulator/PhotoPicker.framework"; sourceTree = "<absolute>"; };
 		EBA70AEA1C7EA94B0089ECD7 /* PhotoPickerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoPickerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBA70AED1C7EA94B0089ECD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EBA70AEF1C7EA94B0089ECD7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -38,7 +39,6 @@
 		EBA70AF41C7EA94B0089ECD7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EBA70AF71C7EA94B0089ECD7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EBA70AF91C7EA94B0089ECD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EBA70AFF1C7EA9C00089ECD7 /* PhotoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = PhotoPicker.framework; path = "/Users/StormXX/Library/Developer/Xcode/DerivedData/PhotoPicker-hhwhojwpvltogwakwnfguhfezggi/Build/Products/Debug-iphoneos/PhotoPicker.framework"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBA70B001C7EA9C00089ECD7 /* PhotoPicker.framework in Frameworks */,
+				EB628E991CCF5F1B004EBB56 /* PhotoPicker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +56,7 @@
 		EBA70AE11C7EA94B0089ECD7 = {
 			isa = PBXGroup;
 			children = (
-				EBA70AFF1C7EA9C00089ECD7 /* PhotoPicker.framework */,
+				EB628E981CCF5F1B004EBB56 /* PhotoPicker.framework */,
 				EBA70AEC1C7EA94B0089ECD7 /* PhotoPickerDemo */,
 				EBA70AEB1C7EA94B0089ECD7 /* Products */,
 			);

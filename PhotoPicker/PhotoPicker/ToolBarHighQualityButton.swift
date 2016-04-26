@@ -66,7 +66,7 @@ class ToolBarHighQualityButton: UIView {
         titleLabel.font = UIFont.systemFontOfSize(15.0)
         titleLabel.text = "Origin"
         
-        tap = UITapGestureRecognizer(target: self, action: "tapped:")
+        tap = UITapGestureRecognizer(target: self, action: #selector(ToolBarHighQualityButton.tapped(_:)))
         addGestureRecognizer(tap)
     }
     

@@ -146,7 +146,7 @@ class AssetsViewController: UICollectionViewController {
             selectedAssets.append(asset)
             lastSelectItemIndexPath = indexPath
         } else {
-            photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: [asset], needHighQualityImage: toolbarHighQualityButton.checked)
+            photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: [asset], needHighQualityImage: true)
         }
         
         updateToolBar()
@@ -204,7 +204,7 @@ extension AssetsViewController {
         toolbarHighQualityButton = ToolBarHighQualityButton(frame: CGRect(origin: CGPointZero, size: CGSize(width: 150, height: 21.0)))
         toolbarHighQualityButton.assetsViewController = self
         
-        sendBarItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: "sendButtonTapped")
+        sendBarItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: #selector(AssetsViewController.sendButtonTapped))
         sendBarItem.enabled = false
         let highqualityBarItem = UIBarButtonItem(customView: toolbarHighQualityButton)
         let numberBarItem = UIBarButtonItem(customView: toolbarNumberView)

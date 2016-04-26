@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     @IBAction func showButtonTapped(sender: UIButton) {
         let photoPickerController = PhotoPickerController()
         photoPickerController.delegate = self
+        photoPickerController.allowMultipleSelection = false
         self.presentViewController(photoPickerController, animated: true, completion: nil)
     }
     override func didReceiveMemoryWarning() {
