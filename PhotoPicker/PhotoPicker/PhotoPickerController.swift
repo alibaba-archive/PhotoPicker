@@ -23,7 +23,7 @@ public class PhotoPickerController: UIViewController {
     //MARK: - private property
     private var albumsNavigationController: UINavigationController!
     
-    public init() {
+    public init(localizedStrings: [String: String]) {
         super.init(nibName:nil, bundle:nil)
         
         self.assetCollectionSubtypes = [.SmartAlbumUserLibrary,
@@ -33,6 +33,7 @@ public class PhotoPickerController: UIViewController {
                                         .AlbumRegular]
         
         setupAlbumsViewController()
+        localizedString = localizedStrings
         
         let albumsViewController = albumsNavigationController.topViewController as! AlbumsViewController
         albumsViewController.photoPickerController = self

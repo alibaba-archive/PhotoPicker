@@ -21,6 +21,7 @@ class AlbumsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupCancelButton()
         tableView.rowHeight = 86.0
         loadAlbums()
         
@@ -34,7 +35,7 @@ class AlbumsViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        navigationItem.title = "Photos"
+        navigationItem.title = localizedString["PhotoPicker.Title"]
         navigationItem.prompt = photoPickerController.prompt
         
         navigationController?.setToolbarHidden(true, animated: false)
@@ -76,13 +77,19 @@ class AlbumsViewController: UITableViewController {
 
 //MARK: - response method
 extension AlbumsViewController {
-    @IBAction func cancelButtonTapped(sender: UIBarButtonItem) {
+    func cancelButtonTapped(sender: UIBarButtonItem) {
         photoPickerController.delegate?.photoPickerControllerDidCancel(photoPickerController)
     }
 }
 
 //MARK: - help method
 extension AlbumsViewController {
+
+    func setupCancelButton() {
+        let cancel = UIBarButtonItem(title: localizedString["PhotoPicker.Cancel"], style: .Plain, target: self, action: #selector(cancelButtonTapped))
+        navigationItem.rightBarButtonItem = cancel
+    }
+
     func loadAlbums() {
         let smartAlbums = PHAssetCollection.fetchAssetCollectionsWithType(.SmartAlbum, subtype: .Any, options: nil)
         let userAlbums = PHAssetCollection.fetchAssetCollectionsWithType(.Album, subtype: .Any, options: nil)

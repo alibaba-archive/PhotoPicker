@@ -59,3 +59,12 @@ var currentDevice: UIUserInterfaceIdiom {
         return UIDevice.currentDevice().userInterfaceIdiom
     }
 }
+
+var localizedString: [String: String] = [
+    "PhotoPicker.Cancel": "取消",
+    "PhotoPicker.Send": "发送",
+    "PhotoPicker.Origin": "原图",
+    "PhotoPicker.MaximumNumberOfSelection.Alet": "最多选择 %ld 张照片",
+    "PhotoPicker.Photos": "张照片",
+    "PhotoPicker.Title" : "照片"
+]

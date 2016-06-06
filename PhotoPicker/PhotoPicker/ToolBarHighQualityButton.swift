@@ -31,14 +31,14 @@ class ToolBarHighQualityButton: UIView {
     var highqualityImageSize: Int = 0 {
         didSet {
             if highqualityImageSize == 0 {
-                titleLabel.text = "Origin"
+                titleLabel.text = localizedString["PhotoPicker.Origin"]
             } else {
                 let kb: Float = Float(highqualityImageSize) / 1024.0
                 if kb > 1024.0 {
                     let mb: Float = kb / 1024.0
-                    titleLabel.text = "Origin(\(String(format: "%.2f", mb))M)"
+                    titleLabel.text = "\(localizedString["PhotoPicker.Origin"]!)(\(String(format: "%.2f", mb))M)"
                 } else {
-                    titleLabel.text = "Origin(\(String(format: "%.2f", kb))K)"
+                    titleLabel.text = "\(localizedString["PhotoPicker.Origin"]!)(\(String(format: "%.2f", kb))K)"
                 }
             }
         }
@@ -64,7 +64,7 @@ class ToolBarHighQualityButton: UIView {
         titleLabel = UILabel(frame: CGRectZero)
         titleLabel.textColor = greyTextColor
         titleLabel.font = UIFont.systemFontOfSize(15.0)
-        titleLabel.text = "Origin"
+        titleLabel.text = localizedString["PhotoPicker.Origin"]
         
         tap = UITapGestureRecognizer(target: self, action: #selector(ToolBarHighQualityButton.tapped(_:)))
         addGestureRecognizer(tap)

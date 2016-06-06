@@ -38,6 +38,7 @@ class AssetsViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupCancelButton()
         setupToolBar()
         resetCachedAssets()
         PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
@@ -121,9 +122,9 @@ class AssetsViewController: UICollectionViewController {
             
             if let label = footerView.viewWithTag(100) as? UILabel {
                 if numberOfPhotos == 1 {
-                    label.text = "1 Photo"
+                    label.text = "1 \(localizedString["PhotoPicker.Photos"]!)"
                 } else {
-                    label.text = "\(numberOfPhotos) Photos"
+                    label.text = "\(numberOfPhotos) \(localizedString["PhotoPicker.Photos"]!)"
                 }
             }
             return footerView
@@ -191,20 +192,25 @@ extension AssetsViewController {
         photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: selectedAssets, needHighQualityImage: toolbarHighQualityButton.checked)
     }
     
-    @IBAction func cancelButtonTapped(sender: UIBarButtonItem) {
+    func cancelButtonTapped(sender: UIBarButtonItem) {
         photoPickerController.delegate?.photoPickerControllerDidCancel(photoPickerController)
     }
 }
 
 //MARK: - UI help method
 extension AssetsViewController {
+    func setupCancelButton() {
+        let cancel = UIBarButtonItem(title: localizedString["PhotoPicker.Cancel"], style: .Plain, target: self, action: #selector(cancelButtonTapped))
+        navigationItem.rightBarButtonItem = cancel
+    }
+
     func setupToolBar() {
         guard photoPickerController.allowMultipleSelection else { return }
         toolbarNumberView = ToolBarNumberView(frame: CGRect(origin: CGPointZero, size: CGSize(width: 21.0, height: 21.0)))
         toolbarHighQualityButton = ToolBarHighQualityButton(frame: CGRect(origin: CGPointZero, size: CGSize(width: 150, height: 21.0)))
         toolbarHighQualityButton.assetsViewController = self
         
-        sendBarItem = UIBarButtonItem(title: "Send", style: .Plain, target: self, action: #selector(AssetsViewController.sendButtonTapped))
+        sendBarItem = UIBarButtonItem(title: localizedString["PhotoPicker.Send"], style: .Plain, target: self, action: #selector(AssetsViewController.sendButtonTapped))
         sendBarItem.enabled = false
         let highqualityBarItem = UIBarButtonItem(customView: toolbarHighQualityButton)
         let numberBarItem = UIBarButtonItem(customView: toolbarNumberView)
@@ -276,8 +282,8 @@ extension AssetsViewController {
     
     func showMaximumSelectionReachedAlert() {
         let maximumNumberOfSelection = photoPickerController.maximumNumberOfSelection
-        let alertController = UIAlertController(title: nil, message: "最多选择\(maximumNumberOfSelection)张照片", preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let alertController = UIAlertController(title: nil, message: String(format: localizedString["PhotoPicker.MaximumNumberOfSelection.Alet"]!, maximumNumberOfSelection), preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: localizedString["PhotoPicker.Cancel"], style: .Cancel, handler: nil)
         alertController.addAction(cancelAction)
         
         navigationController?.presentViewController(alertController, animated: true, completion: nil)

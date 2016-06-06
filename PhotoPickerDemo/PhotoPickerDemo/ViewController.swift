@@ -17,9 +17,18 @@ class ViewController: UIViewController {
     }
 
     @IBAction func showButtonTapped(sender: UIButton) {
-        let photoPickerController = PhotoPickerController()
+        let localizedString: [String: String] = [
+            "PhotoPicker.Cancel": "Cancel",
+            "PhotoPicker.Send": "Send",
+            "PhotoPicker.Origin": "Origin",
+            "PhotoPicker.MaximumNumberOfSelection.Alet": "You can only select no more than %ld photos",
+            "PhotoPicker.Photos": "Photos",
+            "PhotoPicker.Title": "照片"
+        ]
+        let photoPickerController = PhotoPickerController(localizedStrings: localizedString)
         photoPickerController.delegate = self
-        photoPickerController.allowMultipleSelection = false
+        photoPickerController.allowMultipleSelection = true
+        photoPickerController.maximumNumberOfSelection = 3
         self.presentViewController(photoPickerController, animated: true, completion: nil)
     }
     override func didReceiveMemoryWarning() {
