@@ -18,12 +18,15 @@ class ViewController: UIViewController {
 
     @IBAction func showButtonTapped(sender: UIButton) {
         let localizedString: [String: String] = [
-            "PhotoPicker.Cancel": "Cancel",
-            "PhotoPicker.Send": "Send",
-            "PhotoPicker.Origin": "Origin",
-            "PhotoPicker.MaximumNumberOfSelection.Alet": "You can only select no more than %ld photos",
-            "PhotoPicker.Photos": "Photos",
-            "PhotoPicker.Title": "照片"
+            "PhotoPicker.Cancel": "取消",
+            "PhotoPicker.OK": "确定",
+            "PhotoPicker.Send": "发送",
+            "PhotoPicker.Origin": "原图",
+            "PhotoPicker.MaximumNumberOfSelection.Alert": "最多选择 %ld 张照片",
+            "PhotoPicker.Photos": "张照片",
+            "PhotoPicker.Videos": "个视频",
+            "PhotoPicker.Title" : "照片",
+            "PhotoPicker.VideoSelect.Alert": "当你选择视频时，只能选择一个视频哦!"
         ]
         let photoPickerController = PhotoPickerController(localizedStrings: localizedString)
         photoPickerController.delegate = self

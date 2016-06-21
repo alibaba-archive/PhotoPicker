@@ -129,7 +129,50 @@
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V4v-uK-1Vj">
                                             <rect key="frame" x="0.0" y="0.0" width="78" height="78"/>
                                         </imageView>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pNO-2d-B21" userLabel="Overlay View">
+                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tEl-5f-9Sx" customClass="VideoIndicatorView" customModule="PhotoPicker" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="58" width="78" height="20"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aUh-Z8-ChR" customClass="VideoIconView" customModule="PhotoPicker" customModuleProvider="target">
+                                                    <rect key="frame" x="5" y="6" width="14" height="8"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="14" id="YPM-Xw-fCT"/>
+                                                        <constraint firstAttribute="height" constant="8" id="hDF-t0-vyO"/>
+                                                    </constraints>
+                                                </view>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FFI-da-jA3" customClass="SlomoIconView" customModule="PhotoPicker" customModuleProvider="target">
+                                                    <rect key="frame" x="5" y="3" width="12" height="12"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="12" id="46j-Qt-yK4"/>
+                                                        <constraint firstAttribute="width" constant="12" id="xMT-zV-bGi"/>
+                                                    </constraints>
+                                                </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VlG-ZK-GnM">
+                                                    <rect key="frame" x="23" y="3.5" width="50" height="14.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstItem="aUh-Z8-ChR" firstAttribute="centerY" secondItem="tEl-5f-9Sx" secondAttribute="centerY" id="0J4-9f-1Dm"/>
+                                                <constraint firstItem="aUh-Z8-ChR" firstAttribute="leading" secondItem="tEl-5f-9Sx" secondAttribute="leading" constant="5" id="0iL-Rk-qjX"/>
+                                                <constraint firstAttribute="trailing" secondItem="VlG-ZK-GnM" secondAttribute="trailing" constant="5" id="0wD-8X-EkQ"/>
+                                                <constraint firstItem="VlG-ZK-GnM" firstAttribute="leading" secondItem="aUh-Z8-ChR" secondAttribute="trailing" constant="4" id="3fI-ou-tTq"/>
+                                                <constraint firstAttribute="height" constant="20" id="AJl-Cl-FfY"/>
+                                                <constraint firstItem="FFI-da-jA3" firstAttribute="leading" secondItem="aUh-Z8-ChR" secondAttribute="leading" id="F75-7i-4Lz"/>
+                                                <constraint firstItem="VlG-ZK-GnM" firstAttribute="centerY" secondItem="tEl-5f-9Sx" secondAttribute="centerY" id="aml-9e-gak"/>
+                                                <constraint firstItem="FFI-da-jA3" firstAttribute="top" secondItem="aUh-Z8-ChR" secondAttribute="top" constant="-3" id="oRV-Im-DNZ"/>
+                                            </constraints>
+                                            <connections>
+                                                <outlet property="slomoIcon" destination="FFI-da-jA3" id="lkN-ts-3nK"/>
+                                                <outlet property="timeLabel" destination="VlG-ZK-GnM" id="gLq-ZN-KoT"/>
+                                                <outlet property="videoIcon" destination="aUh-Z8-ChR" id="n39-sV-n25"/>
+                                            </connections>
+                                        </view>
+                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pNO-2d-B21" userLabel="Overlay View">
                                             <rect key="frame" x="0.0" y="0.0" width="78" height="78"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark_unselected" translatesAutoresizingMaskIntoConstraints="NO" id="5Wg-fA-8qV">
@@ -154,15 +197,19 @@
                                     <constraint firstItem="V4v-uK-1Vj" firstAttribute="top" secondItem="6Ww-0p-UBG" secondAttribute="top" id="9pn-nO-Mg8"/>
                                     <constraint firstItem="V4v-uK-1Vj" firstAttribute="leading" secondItem="6Ww-0p-UBG" secondAttribute="leading" id="E2E-85-71h"/>
                                     <constraint firstAttribute="bottom" secondItem="V4v-uK-1Vj" secondAttribute="bottom" id="ObY-6b-J3W"/>
+                                    <constraint firstItem="tEl-5f-9Sx" firstAttribute="trailing" secondItem="6Ww-0p-UBG" secondAttribute="trailing" id="RSY-vq-AOk"/>
                                     <constraint firstAttribute="trailing" secondItem="pNO-2d-B21" secondAttribute="trailing" id="YMZ-VZ-XUi"/>
+                                    <constraint firstItem="tEl-5f-9Sx" firstAttribute="leading" secondItem="6Ww-0p-UBG" secondAttribute="leading" id="aHa-Gy-MBZ"/>
                                     <constraint firstAttribute="bottom" secondItem="pNO-2d-B21" secondAttribute="bottom" id="cgd-Ag-8k8"/>
                                     <constraint firstItem="pNO-2d-B21" firstAttribute="top" secondItem="6Ww-0p-UBG" secondAttribute="top" id="d5P-Mi-qOc"/>
+                                    <constraint firstItem="tEl-5f-9Sx" firstAttribute="bottom" secondItem="6Ww-0p-UBG" secondAttribute="bottom" id="ikP-ZN-uhS"/>
                                     <constraint firstAttribute="trailing" secondItem="V4v-uK-1Vj" secondAttribute="trailing" id="uSS-jt-Ejz"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="checkMarkImageView" destination="5Wg-fA-8qV" id="6sG-bx-TlU"/>
                                     <outlet property="imageView" destination="V4v-uK-1Vj" id="xUS-NG-zgN"/>
                                     <outlet property="overlayView" destination="pNO-2d-B21" id="5R4-Z1-LsA"/>
+                                    <outlet property="videoIndicatorView" destination="tEl-5f-9Sx" id="4hS-Rn-V78"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>

@@ -19,6 +19,7 @@ public class PhotoPickerController: UIViewController {
     public var maximumNumberOfSelection: Int = 9
     public var mediaType: PhotoPickerMediaType = .Any
     public var prompt: String?
+    var hasShowVideoAlert: Bool = false
     
     //MARK: - private property
     private var albumsNavigationController: UINavigationController!

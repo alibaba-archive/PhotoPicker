@@ -13,6 +13,7 @@ class AssetCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var overlayView: UIView!
     @IBOutlet weak var checkMarkImageView: UIImageView!
+    @IBOutlet weak var videoIndicatorView: VideoIndicatorView!
     
     override var selected: Bool {
         willSet {
@@ -32,5 +33,15 @@ class AssetCell: UICollectionViewCell {
                 }
             }
         }
+    }
+
+    func showVideoIcon() {
+        videoIndicatorView.videoIcon.hidden = false
+        videoIndicatorView.slomoIcon.hidden = true
+    }
+    
+    func showSlomoIcon() {
+        videoIndicatorView.videoIcon.hidden = true
+        videoIndicatorView.slomoIcon.hidden = false
     }
 }

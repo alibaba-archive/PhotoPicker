@@ -20,6 +20,10 @@
 		EBA70B121C7EE1580089ECD7 /* AlbumsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA70B111C7EE1580089ECD7 /* AlbumsViewController.swift */; };
 		EBA70B141C7F03580089ECD7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBA70B131C7F03580089ECD7 /* Images.xcassets */; };
 		EBCD67341C843E8600146FDB /* ToolBarNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCD67331C843E8600146FDB /* ToolBarNumberView.swift */; };
+		EBD4A75D1D1924C7003280BF /* VideoIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD4A75C1D1924C7003280BF /* VideoIconView.swift */; };
+		EBD4A75F1D192595003280BF /* UIView+Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD4A75E1D192595003280BF /* UIView+Frame.swift */; };
+		EBD4A7611D1926C9003280BF /* SlomoIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD4A7601D1926C9003280BF /* SlomoIconView.swift */; };
+		EBD4A7631D1927E1003280BF /* VideoIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD4A7621D1927E1003280BF /* VideoIndicatorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +42,10 @@
 		EBA70B111C7EE1580089ECD7 /* AlbumsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumsViewController.swift; sourceTree = "<group>"; };
 		EBA70B131C7F03580089ECD7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../Images.xcassets; sourceTree = "<group>"; };
 		EBCD67331C843E8600146FDB /* ToolBarNumberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolBarNumberView.swift; sourceTree = "<group>"; };
+		EBD4A75C1D1924C7003280BF /* VideoIconView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoIconView.swift; sourceTree = "<group>"; };
+		EBD4A75E1D192595003280BF /* UIView+Frame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Frame.swift"; sourceTree = "<group>"; };
+		EBD4A7601D1926C9003280BF /* SlomoIconView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlomoIconView.swift; sourceTree = "<group>"; };
+		EBD4A7621D1927E1003280BF /* VideoIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoIndicatorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,10 +111,12 @@
 		EBA70B051C7EAB660089ECD7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EBD4A75B1D1924A7003280BF /* IconViews */,
 				EBA70B081C7ED6D60089ECD7 /* AlbumCell.swift */,
 				EB3E4A601C8031D800175777 /* AssetCell.swift */,
 				EBCD67331C843E8600146FDB /* ToolBarNumberView.swift */,
 				EB15452D1C856C920055715B /* ToolBarHighQualityButton.swift */,
+				EBD4A7621D1927E1003280BF /* VideoIndicatorView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -114,10 +124,20 @@
 		EBA70B0E1C7EDA6E0089ECD7 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				EBD4A75E1D192595003280BF /* UIView+Frame.swift */,
 				EBA70B0F1C7EDB3F0089ECD7 /* PhotoPickerProtocol.swift */,
 				EB48DC2F1C7F0EB3009F5898 /* CommonExtension.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		EBD4A75B1D1924A7003280BF /* IconViews */ = {
+			isa = PBXGroup;
+			children = (
+				EBD4A75C1D1924C7003280BF /* VideoIconView.swift */,
+				EBD4A7601D1926C9003280BF /* SlomoIconView.swift */,
+			);
+			name = IconViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,14 +222,18 @@
 			files = (
 				EBCD67341C843E8600146FDB /* ToolBarNumberView.swift in Sources */,
 				EB3E4A611C8031D800175777 /* AssetCell.swift in Sources */,
+				EBD4A7631D1927E1003280BF /* VideoIndicatorView.swift in Sources */,
 				EBA70B0D1C7ED91E0089ECD7 /* PhotoPickerController.swift in Sources */,
 				EBA70B091C7ED6D60089ECD7 /* AlbumCell.swift in Sources */,
 				EBA70B101C7EDB3F0089ECD7 /* PhotoPickerProtocol.swift in Sources */,
 				EB15452E1C856C920055715B /* ToolBarHighQualityButton.swift in Sources */,
 				EBA70B0B1C7ED8030089ECD7 /* constant.swift in Sources */,
 				EB48DC301C7F0EB3009F5898 /* CommonExtension.swift in Sources */,
+				EBD4A75F1D192595003280BF /* UIView+Frame.swift in Sources */,
 				EBA70B121C7EE1580089ECD7 /* AlbumsViewController.swift in Sources */,
+				EBD4A75D1D1924C7003280BF /* VideoIconView.swift in Sources */,
 				EB3E4A651C8036E200175777 /* AssetsViewController.swift in Sources */,
+				EBD4A7611D1926C9003280BF /* SlomoIconView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

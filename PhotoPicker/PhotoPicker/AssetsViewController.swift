@@ -119,13 +119,10 @@ class AssetsViewController: UICollectionViewController {
         if kind == UICollectionElementKindSectionFooter {
             let footerView: UICollectionReusableView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: assetFooterViewIdentifier, forIndexPath: indexPath)
             let numberOfPhotos = assetsFetchResults.countOfAssetsWithMediaType(.Image)
+            let numberOfVideos = assetsFetchResults.countOfAssetsWithMediaType(.Video)
             
             if let label = footerView.viewWithTag(100) as? UILabel {
-                if numberOfPhotos == 1 {
-                    label.text = "1 \(localizedString["PhotoPicker.Photos"]!)"
-                } else {
-                    label.text = "\(numberOfPhotos) \(localizedString["PhotoPicker.Photos"]!)"
-                }
+                label.text = "\(numberOfPhotos) \(localizedString["PhotoPicker.Photos"]!) , \(numberOfVideos) \(localizedString["PhotoPicker.Videos"]!)"
             }
             return footerView
         }
@@ -134,6 +131,17 @@ class AssetsViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDelegate
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        func clearSelectedCell() {
+            selectedAssets.removeAll()
+            if let selectedIndexPathes = collectionView.indexPathsForSelectedItems() {
+                selectedIndexPathes.forEach({ (selectIndexPath) in
+                    if selectIndexPath != indexPath {
+                        collectionView.deselectItemAtIndexPath(selectIndexPath, animated: false)
+                    }
+                })
+            }
+        }
+
         guard let asset = assetsFetchResults[indexPath.item] as? PHAsset else { return }
         
         if photoPickerController.allowMultipleSelection {
@@ -144,13 +152,24 @@ class AssetsViewController: UICollectionViewController {
                 }
             }
             
+            if asset.mediaType == .Video {
+                clearSelectedCell()
+                toggleHighQualityButtonHidden(true)
+                showVideoSelectAlert()
+            } else if isVideoAsset(lastSelectItemIndexPath) {
+                clearSelectedCell()
+                toggleHighQualityButtonHidden(false)
+            } else {
+                toggleHighQualityButtonHidden(false)
+            }
+
             selectedAssets.append(asset)
             lastSelectItemIndexPath = indexPath
+            updateToolBar()
         } else {
             photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: [asset], needHighQualityImage: true)
         }
         
-        updateToolBar()
         photoPickerController.delegate?.photoPickerController(photoPickerController, didSelectAsset: asset)
     }
     
@@ -220,6 +239,10 @@ extension AssetsViewController {
         navigationController?.toolbar.tintColor = toolBarTintColor
         navigationController?.setToolbarHidden(false, animated: true)
     }
+
+    func toggleHighQualityButtonHidden(hidden: Bool) {
+        toolbarHighQualityButton.hidden = hidden
+    }
     
     func updateToolBar() {
         guard photoPickerController.allowMultipleSelection else { return }
@@ -241,6 +264,20 @@ extension AssetsViewController {
         }
         self.toolbarHighQualityButton.highqualityImageSize = size
     }
+
+    func isVideoAsset(indexPath: NSIndexPath?) -> Bool {
+        guard let _ = indexPath, asset = assetsFetchResults[indexPath!.item] as? PHAsset else { return false }
+        return asset.mediaType == .Video
+    }
+
+    func showVideoSelectAlert() {
+        guard !photoPickerController.hasShowVideoAlert else { return }
+        let alertController = UIAlertController(title: nil, message: localizedString["PhotoPicker.VideoSelect.Alert"] ?? "", preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: localizedString["PhotoPicker.OK"], style: .Cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        presentViewController(alertController, animated: true, completion: nil)
+        photoPickerController.hasShowVideoAlert = true
+    }
 }
 
 //MARK: - collection view help method
@@ -259,6 +296,22 @@ extension AssetsViewController {
             options: nil) { (image, info) -> Void in
                 guard let image = image where cell.tag == indexPath.item else { return }
                 cell.imageView.image = image
+        }
+        
+        if asset.mediaType == .Video {
+            cell.videoIndicatorView.hidden = false
+            
+            let minutes = Int(asset.duration / 60.0)
+            let seconds = Int(ceil(asset.duration - 60.0 * Double(minutes)))
+            cell.videoIndicatorView.timeLabel.text = String(format: "%02ld:%02ld", minutes, seconds)
+            
+            if asset.mediaSubtypes == .VideoHighFrameRate {
+                cell.showSlomoIcon()
+            } else {
+                cell.showVideoIcon()
+            }
+        } else {
+            cell.videoIndicatorView.hidden = true
         }
     }
     
@@ -282,7 +335,7 @@ extension AssetsViewController {
     
     func showMaximumSelectionReachedAlert() {
         let maximumNumberOfSelection = photoPickerController.maximumNumberOfSelection
-        let alertController = UIAlertController(title: nil, message: String(format: localizedString["PhotoPicker.MaximumNumberOfSelection.Alet"]!, maximumNumberOfSelection), preferredStyle: .Alert)
+        let alertController = UIAlertController(title: nil, message: String(format: localizedString["PhotoPicker.MaximumNumberOfSelection.Alert"]!, maximumNumberOfSelection), preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: localizedString["PhotoPicker.Cancel"], style: .Cancel, handler: nil)
         alertController.addAction(cancelAction)
         
