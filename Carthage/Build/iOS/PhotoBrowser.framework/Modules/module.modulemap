@@ -1,0 +1,10 @@
+framework module PhotoBrowser {
+  umbrella header "PhotoBrowser.h"
+
+  export *
+  module * { export * }
+}
+
+module PhotoBrowser.Swift {
+    header "PhotoBrowser-Swift.h"
+}
