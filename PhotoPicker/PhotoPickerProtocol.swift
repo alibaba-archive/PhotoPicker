@@ -9,31 +9,31 @@
 import Photos
 
 public protocol PhotoPickerDelegate: class {
-    func photoPickerController(controller: PhotoPickerController, didFinishPickingAssets assets: [PHAsset], needHighQualityImage: Bool)
-    func photoPickerControllerDidCancel(controller: PhotoPickerController)
-    func photoPickerController(controller: PhotoPickerController, shouldSelectAsset asset: PHAsset) -> Bool
-    func photoPickerController(controller: PhotoPickerController, didSelectAsset asset: PHAsset)
-    func photoPickerController(controller: PhotoPickerController, didDeselectAsset asset: PHAsset)
+    func photoPickerController(_ controller: PhotoPickerController, didFinishPickingAssets assets: [PHAsset], needHighQualityImage: Bool)
+    func photoPickerControllerDidCancel(_ controller: PhotoPickerController)
+    func photoPickerController(_ controller: PhotoPickerController, shouldSelectAsset asset: PHAsset) -> Bool
+    func photoPickerController(_ controller: PhotoPickerController, didSelectAsset asset: PHAsset)
+    func photoPickerController(_ controller: PhotoPickerController, didDeselectAsset asset: PHAsset)
 }
 
 public extension PhotoPickerDelegate {
-    func photoPickerController(controller: PhotoPickerController, didFinishPickingAssets assets: [PHAsset], needHighQualityImage: Bool) {
+    func photoPickerController(_ controller: PhotoPickerController, didFinishPickingAssets assets: [PHAsset], needHighQualityImage: Bool) {
         return
     }
     
-    func photoPickerControllerDidCancel(controller: PhotoPickerController) {
+    func photoPickerControllerDidCancel(_ controller: PhotoPickerController) {
         return
     }
     
-    func photoPickerController(controller: PhotoPickerController, shouldSelectAsset asset: PHAsset) -> Bool {
+    func photoPickerController(_ controller: PhotoPickerController, shouldSelectAsset asset: PHAsset) -> Bool {
         return true
     }
     
-    func photoPickerController(controller: PhotoPickerController, didSelectAsset asset: PHAsset) {
+    func photoPickerController(_ controller: PhotoPickerController, didSelectAsset asset: PHAsset) {
         return
     }
     
-    func photoPickerController(controller: PhotoPickerController, didDeselectAsset asset: PHAsset) {
+    func photoPickerController(_ controller: PhotoPickerController, didDeselectAsset asset: PHAsset) {
         return
     }
 }

@@ -11,43 +11,43 @@ import UIKit
 extension UIView {
     var width: CGFloat {
         get {
-            return CGRectGetWidth(bounds)
+            return bounds.width
         }
     }
     
     var height: CGFloat {
         get {
-            return CGRectGetHeight(bounds)
+            return bounds.height
         }
     }
     
     var minX: CGFloat {
         get {
-            return CGRectGetMinX(bounds)
+            return bounds.minX
         }
     }
     
     var minY: CGFloat {
         get {
-            return CGRectGetMinY(bounds)
+            return bounds.minY
         }
     }
     
     var maxX: CGFloat {
         get {
-            return CGRectGetMaxX(bounds)
+            return bounds.maxX
         }
     }
     
     var maxY: CGFloat {
         get {
-            return CGRectGetMaxY(bounds)
+            return bounds.maxY
         }
     }
 
     var midY: CGFloat {
         get {
-            return CGRectGetMidY(bounds)
+            return bounds.midY
         }
     }
 

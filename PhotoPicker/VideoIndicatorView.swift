@@ -19,8 +19,8 @@ class VideoIndicatorView: UIView {
         
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = bounds
-        gradientLayer.colors = [UIColor.clearColor().CGColor, UIColor.blackColor().CGColor]
-        layer.insertSublayer(gradientLayer, atIndex: 0)
+        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+        layer.insertSublayer(gradientLayer, at: 0)
     }
 
 }

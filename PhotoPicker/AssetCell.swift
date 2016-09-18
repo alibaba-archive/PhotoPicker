@@ -14,14 +14,14 @@ class AssetCell: UICollectionViewCell {
     @IBOutlet weak var overlayView: UIView!
     @IBOutlet weak var checkMarkImageView: UIImageView!
     @IBOutlet weak var videoIndicatorView: VideoIndicatorView!
-    private var checkHandler: ((checked: Bool) -> Bool)?
+    fileprivate var checkHandler: ((_ checked: Bool) -> Bool)?
 
-    private var checked: Bool = false
+    fileprivate var checked: Bool = false
 
     override func awakeFromNib() {
         super.awakeFromNib()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler(_:)))
-        checkMarkImageView.userInteractionEnabled = true
+        checkMarkImageView.isUserInteractionEnabled = true
         checkMarkImageView.addGestureRecognizer(tapGesture)
     }
 
@@ -30,28 +30,28 @@ class AssetCell: UICollectionViewCell {
         checkHandler = nil
     }
 
-    func tapGestureHandler(recognizer: UIGestureRecognizer) {
+    func tapGestureHandler(_ recognizer: UIGestureRecognizer) {
         guard let handler = checkHandler else { return }
-        if handler(checked: checked) {
+        if handler(checked) {
             setChecked(!checked, animation: true)
         }
     }
 
-    func addCheckHandler(handler: (checked: Bool) -> Bool) {
+    func addCheckHandler(_ handler: @escaping (_ checked: Bool) -> Bool) {
         checkHandler = handler
     }
 
-    func setChecked(checked: Bool, animation: Bool) {
-        checkMarkImageView.image = checked ? UIImage(named: selectedCheckMarkImageName, inBundle: currentBundle, compatibleWithTraitCollection: nil) : UIImage(named: unselectedCheckMarkImageName, inBundle: currentBundle, compatibleWithTraitCollection: nil)
+    func setChecked(_ checked: Bool, animation: Bool) {
+        checkMarkImageView.image = checked ? UIImage(named: selectedCheckMarkImageName, in: currentBundle, compatibleWith: nil) : UIImage(named: unselectedCheckMarkImageName, in: currentBundle, compatibleWith: nil)
         if !self.checked && checked && animation {
-            UIView.animateKeyframesWithDuration(0.33, delay: 0.0, options: [], animations: { () -> Void in
-                UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.5, animations: { [unowned self]() -> Void in
-                    let transform = CGAffineTransformMakeScale(1.3, 1.3)
+            UIView.animateKeyframes(withDuration: 0.33, delay: 0.0, options: [], animations: { () -> Void in
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5, animations: { [unowned self]() -> Void in
+                    let transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
                     self.checkMarkImageView.transform = transform
                     })
                 
-                UIView.addKeyframeWithRelativeStartTime(0.5, relativeDuration: 0.5, animations: { [unowned self]() -> Void in
-                    self.checkMarkImageView.transform = CGAffineTransformIdentity
+                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5, animations: { [unowned self]() -> Void in
+                    self.checkMarkImageView.transform = CGAffineTransform.identity
                     })
                 }, completion: nil)
         }
@@ -59,12 +59,12 @@ class AssetCell: UICollectionViewCell {
     }
 
     func showVideoIcon() {
-        videoIndicatorView.videoIcon.hidden = false
-        videoIndicatorView.slomoIcon.hidden = true
+        videoIndicatorView.videoIcon.isHidden = false
+        videoIndicatorView.slomoIcon.isHidden = true
     }
     
     func showSlomoIcon() {
-        videoIndicatorView.videoIcon.hidden = true
-        videoIndicatorView.slomoIcon.hidden = false
+        videoIndicatorView.videoIcon.isHidden = true
+        videoIndicatorView.slomoIcon.isHidden = false
     }
 }

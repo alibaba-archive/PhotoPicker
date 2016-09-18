@@ -9,29 +9,29 @@
 import UIKit
 import Photos
 
-public class PhotoPickerController: UIViewController {
+open class PhotoPickerController: UIViewController {
     
     //MARK: - public property
-    public weak var delegate: PhotoPickerDelegate?
-    public var assetCollectionSubtypes: [PHAssetCollectionSubtype]?
-    public var allowMultipleSelection: Bool = true
-    public var minimumNumberOfSelection: Int = 1
-    public var maximumNumberOfSelection: Int = 9
-    public var mediaType: PhotoPickerMediaType = .Any
-    public var prompt: String?
+    open weak var delegate: PhotoPickerDelegate?
+    open var assetCollectionSubtypes: [PHAssetCollectionSubtype]?
+    open var allowMultipleSelection: Bool = true
+    open var minimumNumberOfSelection: Int = 1
+    open var maximumNumberOfSelection: Int = 9
+    open var mediaType: PhotoPickerMediaType = .any
+    open var prompt: String?
     var hasShowVideoAlert: Bool = false
     
     //MARK: - private property
-    private var albumsNavigationController: UINavigationController!
+    fileprivate var albumsNavigationController: UINavigationController!
     
     public init(localizedStrings: [String: String]) {
         super.init(nibName:nil, bundle:nil)
         
-        self.assetCollectionSubtypes = [.SmartAlbumUserLibrary,
-                                        .SmartAlbumFavorites,
-                                        .AlbumMyPhotoStream,
-                                        .AlbumCloudShared,
-                                        .AlbumRegular]
+        self.assetCollectionSubtypes = [.smartAlbumUserLibrary,
+                                        .smartAlbumFavorites,
+                                        .albumMyPhotoStream,
+                                        .albumCloudShared,
+                                        .albumRegular]
         
         setupAlbumsViewController()
         localizedString = localizedStrings
@@ -42,23 +42,23 @@ public class PhotoPickerController: UIViewController {
     
     func setupAlbumsViewController() {
         let storyboard = UIStoryboard(name: "PhotoPicker", bundle: currentBundle)
-        let navigationController: UINavigationController = storyboard.instantiateViewControllerWithIdentifier("AlbumsNavigationController") as! UINavigationController
+        let navigationController: UINavigationController = storyboard.instantiateViewController(withIdentifier: "AlbumsNavigationController") as! UINavigationController
         
         addChildViewController(navigationController)
         navigationController.view.frame = view.bounds
         view.addSubview(navigationController.view)
-        navigationController.didMoveToParentViewController(self)
+        navigationController.didMove(toParentViewController: self)
         
         albumsNavigationController = navigationController
     }
 
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
 
-    public override func didReceiveMemoryWarning() {
+    open override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }

@@ -9,16 +9,16 @@
 import UIKit
 
 extension CGSize {
-    func scale(scale: CGFloat) -> CGSize {
+    func scale(_ scale: CGFloat) -> CGSize {
         return CGSize(width: self.width * scale, height: self.height * scale)
     }
 }
 
 extension UICollectionView {
-    func pp_indexPathsForElementsInRect(rect: CGRect) -> [NSIndexPath]? {
-        let allLayoutAttributes = self.collectionViewLayout.layoutAttributesForElementsInRect(rect)
-        guard let attributes = allLayoutAttributes where attributes.count > 0 else { return nil }
-        var indexPaths: [NSIndexPath] = []
+    func pp_indexPathsForElementsInRect(_ rect: CGRect) -> [IndexPath]? {
+        let allLayoutAttributes = self.collectionViewLayout.layoutAttributesForElements(in: rect)
+        guard let attributes = allLayoutAttributes , attributes.count > 0 else { return nil }
+        var indexPaths: [IndexPath] = []
         for layoutAttributes in attributes {
             let indexPath = layoutAttributes.indexPath
             indexPaths.append(indexPath)
@@ -27,11 +27,11 @@ extension UICollectionView {
     }
 }
 
-extension NSIndexSet {
-    func pp_indexPathsFromIndexesInSection(section: Int) -> [NSIndexPath] {
-        var indexPaths: [NSIndexPath] = []
-        for (index, _) in self.enumerate() {
-            indexPaths.append(NSIndexPath(forItem: index, inSection: section))
+extension IndexSet {
+    func pp_indexPathsFromIndexesInSection(_ section: Int) -> [IndexPath] {
+        var indexPaths: [IndexPath] = []
+        for (index, _) in self.enumerated() {
+            indexPaths.append(IndexPath(item: index, section: section))
         }
         return indexPaths
     }

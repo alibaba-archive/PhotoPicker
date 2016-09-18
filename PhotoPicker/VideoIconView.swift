@@ -10,20 +10,20 @@ import UIKit
 
 class VideoIconView: UIView {
 
-    var iconColor: UIColor = UIColor.whiteColor()
+    var iconColor: UIColor = UIColor.white
 
     override func awakeFromNib() {
         super.awakeFromNib()
     }
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         iconColor.setFill()
         
         let trianglePath = UIBezierPath()
-        trianglePath.moveToPoint(CGPoint(x: maxX, y: minY))
-        trianglePath.addLineToPoint(CGPoint(x: maxX, y: maxY))
-        trianglePath.addLineToPoint(CGPoint(x: maxX - midY, y: midY))
-        trianglePath.closePath()
+        trianglePath.move(to: CGPoint(x: maxX, y: minY))
+        trianglePath.addLine(to: CGPoint(x: maxX, y: maxY))
+        trianglePath.addLine(to: CGPoint(x: maxX - midY, y: midY))
+        trianglePath.close()
         trianglePath.fill()
     
         

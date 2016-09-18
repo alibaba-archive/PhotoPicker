@@ -16,7 +16,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
     }
 
-    @IBAction func showButtonTapped(sender: UIButton) {
+    @IBAction func showButtonTapped(_ sender: UIButton) {
         let localizedString: [String: String] = [
             "PhotoPicker.Cancel": "取消",
             "PhotoPicker.OK": "确定",
@@ -32,7 +32,7 @@ class ViewController: UIViewController {
         photoPickerController.delegate = self
         photoPickerController.allowMultipleSelection = true
         photoPickerController.maximumNumberOfSelection = 3
-        self.presentViewController(photoPickerController, animated: true, completion: nil)
+        self.present(photoPickerController, animated: true, completion: nil)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -40,19 +40,19 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: PhotoPickerDelegate {
-    func photoPickerControllerDidCancel(controller: PhotoPickerController) {
-        navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    func photoPickerControllerDidCancel(_ controller: PhotoPickerController) {
+        navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    func photoPickerController(controller: PhotoPickerController, didFinishPickingAssets assets: [PHAsset], needHighQualityImage: Bool) {
-        navigationController?.dismissViewControllerAnimated(true, completion: { () -> Void in
-            let alertController = UIAlertController(title: nil, message: "你已经选择了\(assets.count)张照片", preferredStyle: .Alert)
-            let cancelAction = UIAlertAction(title: "OK", style: .Default) { (action) -> Void in
-                alertController.dismissViewControllerAnimated(true, completion: nil)
+    func photoPickerController(_ controller: PhotoPickerController, didFinishPickingAssets assets: [PHAsset], needHighQualityImage: Bool) {
+        navigationController?.dismiss(animated: true, completion: { () -> Void in
+            let alertController = UIAlertController(title: nil, message: "你已经选择了\(assets.count)张照片", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "OK", style: .default) { (action) -> Void in
+                alertController.dismiss(animated: true, completion: nil)
             }
             alertController.addAction(cancelAction)
             
-            self.navigationController?.presentViewController(alertController, animated: true, completion: nil)
+            self.navigationController?.present(alertController, animated: true, completion: nil)
         })
     }
 }
