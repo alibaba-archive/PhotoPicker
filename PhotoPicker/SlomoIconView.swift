@@ -10,18 +10,18 @@ import UIKit
 
 class SlomoIconView: UIView {
 
-    var iconColor: UIColor = UIColor.whiteColor()
+    var iconColor: UIColor = UIColor.white
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         iconColor.setStroke()
         let width: CGFloat = 2.2
-        let insetRect = CGRectInset(rect, width / 2, width / 2)
+        let insetRect = rect.insetBy(dx: width / 2, dy: width / 2)
 
-        let circlePath = UIBezierPath(ovalInRect: insetRect)
+        let circlePath = UIBezierPath(ovalIn: insetRect)
         circlePath.lineWidth = width
         let pattern: [CGFloat] = [0.75, 0.75]
         circlePath.setLineDash(pattern, count: 2, phase: 0)

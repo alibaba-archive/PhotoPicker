@@ -27,15 +27,15 @@ class AssetsViewController: UICollectionViewController {
     }
     
     //MARK: - private property
-    private let imageManager: PHCachingImageManager = PHCachingImageManager()
-    private var previousPreheatRect: CGRect = CGRectZero
-    private var assetsFetchResults: PHFetchResult!
-    private var lastSelectItemIndexPath: NSIndexPath?
-    private var toolbarNumberView: ToolBarNumberView!
-    private var toolbarHighQualityButton: ToolBarHighQualityButton!
-    private var sendBarItem: UIBarButtonItem!
-    private var needHighQuality: Bool = false
-    private var selectedIndexPaths: [NSIndexPath] = []
+    fileprivate let imageManager: PHCachingImageManager = PHCachingImageManager()
+    fileprivate var previousPreheatRect: CGRect = CGRect.zero
+    fileprivate var assetsFetchResults: PHFetchResult<PHAsset>!
+    fileprivate var lastSelectItemIndexPath: IndexPath?
+    fileprivate var toolbarNumberView: ToolBarNumberView!
+    fileprivate var toolbarHighQualityButton: ToolBarHighQualityButton!
+    fileprivate var sendBarItem: UIBarButtonItem!
+    fileprivate var needHighQuality: Bool = false
+    fileprivate var selectedIndexPaths: [IndexPath] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,14 +43,14 @@ class AssetsViewController: UICollectionViewController {
         setupCancelButton()
         setupToolBar()
         resetCachedAssets()
-        PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
+        PHPhotoLibrary.shared().register(self)
     }
     
     deinit {
-        PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationItem.title = assetCollection.localizedTitle
@@ -60,28 +60,28 @@ class AssetsViewController: UICollectionViewController {
         
         collectionView?.reloadData()
         
-        if assetsFetchResults.count > 0 && isMovingToParentViewController() {
-            let indexPath = NSIndexPath(forItem: assetsFetchResults.count - 1, inSection: 0)
-            collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: false)
+        if assetsFetchResults.count > 0 && isMovingToParentViewController {
+            let indexPath = IndexPath(item: assetsFetchResults.count - 1, section: 0)
+            collectionView?.scrollToItem(at: indexPath, at: .top, animated: false)
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         updateCachedAssets()
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         guard let collectionView = collectionView else { return }
         collectionViewLayout.invalidateLayout()
-        if let indexPath = collectionView.indexPathsForVisibleItems().last {
-            coordinator.animateAlongsideTransition(nil, completion: { (context) -> Void in
-               collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: false)
+        if let indexPath = collectionView.indexPathsForVisibleItems.last {
+            coordinator.animate(alongsideTransition: nil, completion: { (context) -> Void in
+               collectionView.scrollToItem(at: indexPath, at: .bottom, animated: false)
             })
         }
     }
@@ -102,20 +102,20 @@ class AssetsViewController: UICollectionViewController {
     */
 
     // MARK: UICollectionViewDataSource
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return assetsFetchResults.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell: AssetCell = collectionView.dequeueReusableCellWithReuseIdentifier(assetCellIdentifier, forIndexPath: indexPath) as! AssetCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell: AssetCell = collectionView.dequeueReusableCell(withReuseIdentifier: assetCellIdentifier, for: indexPath) as! AssetCell
         fillCell(cell, forIndexPath: indexPath)
         cell.addCheckHandler { [weak self](checked) -> Bool in
-            guard let weakSelf = self where weakSelf.shouldSelectItemAtIndexPath(indexPath, checked: checked) else { return false }
+            guard let weakSelf = self , weakSelf.shouldSelectItemAtIndexPath(indexPath, checked: checked) else { return false }
             if !checked {
                 weakSelf.selectItemAtIndexPath(indexPath)
             } else {
@@ -126,11 +126,11 @@ class AssetsViewController: UICollectionViewController {
         return cell
     }
     
-    override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionElementKindSectionFooter {
-            let footerView: UICollectionReusableView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: assetFooterViewIdentifier, forIndexPath: indexPath)
-            let numberOfPhotos = assetsFetchResults.countOfAssetsWithMediaType(.Image)
-            let numberOfVideos = assetsFetchResults.countOfAssetsWithMediaType(.Video)
+            let footerView: UICollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: assetFooterViewIdentifier, for: indexPath)
+            let numberOfPhotos = assetsFetchResults.countOfAssets(with: .image)
+            let numberOfVideos = assetsFetchResults.countOfAssets(with: .video)
             
             if let label = footerView.viewWithTag(100) as? UILabel {
                 label.text = "\(numberOfPhotos) \(localizedString["PhotoPicker.Photos"]!) , \(numberOfVideos) \(localizedString["PhotoPicker.Videos"]!)"
@@ -141,24 +141,24 @@ class AssetsViewController: UICollectionViewController {
     }
 
     // MARK: UICollectionViewDelegate
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photoBrowser = PhotoBrowser()
         var photos: [Photo] = []
 
-        func appendPhoto(asset: PHAsset) {
+        func appendPhoto(_ asset: PHAsset) {
             let options = PHImageRequestOptions()
-            options.deliveryMode = .HighQualityFormat
-            options.synchronous = true
-            imageManager.requestImageDataForAsset(asset, options: options) { (data, dataUTI, orientation, info) in
+            options.deliveryMode = .highQualityFormat
+            options.isSynchronous = true
+            imageManager.requestImageData(for: asset, options: options) { (data, dataUTI, orientation, info) in
                 guard let imageData = data else { return }
                 let image = UIImage(data: imageData, scale: 1.0)
                 let photo = Photo.init(image: image)
                 photos.append(photo)
             }
         }
-        let currentIndex = selectedIndexPaths.indexOf(indexPath)
+        let currentIndex = selectedIndexPaths.index(of: indexPath)
         if currentIndex == nil {
-            let asset = assetsFetchResults[indexPath.item] as! PHAsset
+            let asset = assetsFetchResults[indexPath.item]
             appendPhoto(asset)
         }
         for asset in selectedAssets {
@@ -170,7 +170,7 @@ class AssetsViewController: UICollectionViewController {
             photoBrowser.setCurrentIndex(to: index)
         }
         
-        self.presentViewController(photoBrowser, animated: true, completion: nil)
+        self.present(photoBrowser, animated: true, completion: nil)
     }
 }
 
@@ -181,7 +181,7 @@ extension AssetsViewController {
         photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: selectedAssets, needHighQualityImage: toolbarHighQualityButton.checked)
     }
     
-    func cancelButtonTapped(sender: UIBarButtonItem) {
+    func cancelButtonTapped(_ sender: UIBarButtonItem) {
         photoPickerController.delegate?.photoPickerControllerDidCancel(photoPickerController)
     }
 }
@@ -189,34 +189,34 @@ extension AssetsViewController {
 //MARK: - UI help method
 extension AssetsViewController {
     func setupCancelButton() {
-        let cancel = UIBarButtonItem(title: localizedString["PhotoPicker.Cancel"], style: .Plain, target: self, action: #selector(cancelButtonTapped))
+        let cancel = UIBarButtonItem(title: localizedString["PhotoPicker.Cancel"], style: .plain, target: self, action: #selector(cancelButtonTapped))
         navigationItem.rightBarButtonItem = cancel
     }
 
     func setupToolBar() {
         guard photoPickerController.allowMultipleSelection else { return }
-        toolbarNumberView = ToolBarNumberView(frame: CGRect(origin: CGPointZero, size: CGSize(width: 21.0, height: 21.0)))
-        toolbarHighQualityButton = ToolBarHighQualityButton(frame: CGRect(origin: CGPointZero, size: CGSize(width: 150, height: 21.0)))
+        toolbarNumberView = ToolBarNumberView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 21.0, height: 21.0)))
+        toolbarHighQualityButton = ToolBarHighQualityButton(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 150, height: 21.0)))
         toolbarHighQualityButton.assetsViewController = self
         
-        sendBarItem = UIBarButtonItem(title: localizedString["PhotoPicker.Send"], style: .Plain, target: self, action: #selector(AssetsViewController.sendButtonTapped))
-        sendBarItem.enabled = false
+        sendBarItem = UIBarButtonItem(title: localizedString["PhotoPicker.Send"], style: .plain, target: self, action: #selector(AssetsViewController.sendButtonTapped))
+        sendBarItem.isEnabled = false
         let highqualityBarItem = UIBarButtonItem(customView: toolbarHighQualityButton)
         let numberBarItem = UIBarButtonItem(customView: toolbarNumberView)
-        let leftSpace = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+        let leftSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbarItems = [highqualityBarItem, leftSpace, numberBarItem, sendBarItem]
         
         navigationController?.toolbar.tintColor = toolBarTintColor
         navigationController?.setToolbarHidden(false, animated: true)
     }
 
-    func toggleHighQualityButtonHidden(hidden: Bool) {
-        toolbarHighQualityButton.hidden = hidden
+    func toggleHighQualityButtonHidden(_ hidden: Bool) {
+        toolbarHighQualityButton.isHidden = hidden
     }
     
     func updateToolBar() {
         guard photoPickerController.allowMultipleSelection else { return }
-        sendBarItem.enabled = (selectedAssets.count != 0)
+        sendBarItem.isEnabled = (selectedAssets.count != 0)
         toolbarNumberView.number = selectedAssets.count
     }
     
@@ -225,63 +225,63 @@ extension AssetsViewController {
         var size: Int = 0
         selectedAssets.forEach { (asset) -> () in
             let options = PHImageRequestOptions()
-            options.synchronous = true
-            PHImageManager.defaultManager().requestImageDataForAsset(asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) -> Void in
+            options.isSynchronous = true
+            PHImageManager.default().requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) -> Void in
                 if let data = imageData {
-                    size += data.length
+                    size += data.count
                 }
             })
         }
         self.toolbarHighQualityButton.highqualityImageSize = size
     }
 
-    func isVideoAsset(indexPath: NSIndexPath?) -> Bool {
-        guard let _ = indexPath, asset = assetsFetchResults[indexPath!.item] as? PHAsset else { return false }
-        return asset.mediaType == .Video
+    func isVideoAsset(_ indexPath: IndexPath?) -> Bool {
+        guard let `indexPath` = indexPath else { return false }
+        return assetsFetchResults[indexPath.item].mediaType == .video
     }
 
     func showVideoSelectAlert() {
         guard !photoPickerController.hasShowVideoAlert else { return }
-        let alertController = UIAlertController(title: nil, message: localizedString["PhotoPicker.VideoSelect.Alert"] ?? "", preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: localizedString["PhotoPicker.OK"], style: .Cancel, handler: nil)
+        let alertController = UIAlertController(title: nil, message: localizedString["PhotoPicker.VideoSelect.Alert"] ?? "", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: localizedString["PhotoPicker.OK"], style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
         photoPickerController.hasShowVideoAlert = true
     }
 }
 
 //MARK: - collection view help method
 extension AssetsViewController {
-    func fillCell(cell: AssetCell, forIndexPath indexPath: NSIndexPath) {
+    func fillCell(_ cell: AssetCell, forIndexPath indexPath: IndexPath) {
         cell.tag = indexPath.item
         
-        let asset = assetsFetchResults[indexPath.item] as! PHAsset
+        let asset = assetsFetchResults[indexPath.item]
         let itemSize = (collectionViewLayout as! UICollectionViewFlowLayout).itemSize
         let targetSize = itemSize.scale(traitCollection.displayScale)
-        cell.overlayView.hidden = !photoPickerController.allowMultipleSelection
+        cell.overlayView.isHidden = !photoPickerController.allowMultipleSelection
         
-        imageManager.requestImageForAsset(asset,
+        imageManager.requestImage(for: asset,
             targetSize: targetSize,
-            contentMode: .AspectFill,
+            contentMode: .aspectFill,
             options: nil) { (image, info) -> Void in
-                guard let image = image where cell.tag == indexPath.item else { return }
+                guard let image = image , cell.tag == indexPath.item else { return }
                 cell.imageView.image = image
         }
         
-        if asset.mediaType == .Video {
-            cell.videoIndicatorView.hidden = false
+        if asset.mediaType == .video {
+            cell.videoIndicatorView.isHidden = false
             
             let minutes = Int(asset.duration / 60.0)
             let seconds = Int(ceil(asset.duration - 60.0 * Double(minutes)))
             cell.videoIndicatorView.timeLabel.text = String(format: "%02ld:%02ld", minutes, seconds)
             
-            if asset.mediaSubtypes == .VideoHighFrameRate {
+            if asset.mediaSubtypes == .videoHighFrameRate {
                 cell.showSlomoIcon()
             } else {
                 cell.showVideoIcon()
             }
         } else {
-            cell.videoIndicatorView.hidden = true
+            cell.videoIndicatorView.isHidden = true
         }
         cell.setChecked(selectedIndexPaths.contains(indexPath), animation: false)
     }
@@ -306,11 +306,11 @@ extension AssetsViewController {
     
     func showMaximumSelectionReachedAlert() {
         let maximumNumberOfSelection = photoPickerController.maximumNumberOfSelection
-        let alertController = UIAlertController(title: nil, message: String(format: localizedString["PhotoPicker.MaximumNumberOfSelection.Alert"]!, maximumNumberOfSelection), preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: localizedString["PhotoPicker.Cancel"], style: .Cancel, handler: nil)
+        let alertController = UIAlertController(title: nil, message: String(format: localizedString["PhotoPicker.MaximumNumberOfSelection.Alert"]!, maximumNumberOfSelection), preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: localizedString["PhotoPicker.Cancel"], style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         
-        navigationController?.presentViewController(alertController, animated: true, completion: nil)
+        navigationController?.present(alertController, animated: true, completion: nil)
     }
 }
 
@@ -326,62 +326,62 @@ extension AssetsViewController {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         switch photoPickerController.mediaType {
-        case .Image:
-            fetchOptions.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.Image.rawValue)
-        case .Video:
-            fetchOptions.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.Video.rawValue)
+        case .image:
+            fetchOptions.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
+        case .video:
+            fetchOptions.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
         default:
             break
         }
         
-        assetsFetchResults = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: fetchOptions)
+        assetsFetchResults = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
     }
     
     func resetCachedAssets() {
         imageManager.stopCachingImagesForAllAssets()
-        previousPreheatRect = CGRectZero
+        previousPreheatRect = CGRect.zero
     }
     
     func updateCachedAssets() {
-        guard isViewLoaded(), let _ = view.window, let collectionView = self.collectionView else { return }
+        guard isViewLoaded, let _ = view.window, let collectionView = self.collectionView else { return }
         
         // The preheat window is twice the height of the visible rect.
         var preheatRect = collectionView.bounds
-        preheatRect = CGRectInset(preheatRect, 0.0, -0.5 * CGRectGetHeight(preheatRect))
+        preheatRect = preheatRect.insetBy(dx: 0.0, dy: -0.5 * preheatRect.height)
         
         /*
         Check if the collection view is showing an area that is significantly
         different to the last preheated area.
         */
-        let delta = abs(CGRectGetMidY(preheatRect) - CGRectGetMidY(previousPreheatRect))
+        let delta = abs(preheatRect.midY - previousPreheatRect.midY)
         
-        if delta > (CGRectGetHeight(collectionView.bounds) / 3.0) {
-            var addedIndexPaths: [NSIndexPath] = []
-            var removedIndexPaths: [NSIndexPath] = []
+        if delta > (collectionView.bounds.height / 3.0) {
+            var addedIndexPaths: [IndexPath] = []
+            var removedIndexPaths: [IndexPath] = []
             
             computeDifferenceBetweenRect(previousPreheatRect, andRect: preheatRect,
                 removedHandler: { (removedRect) -> Void in
                     guard let indexPaths = collectionView.pp_indexPathsForElementsInRect(removedRect) else { return }
-                    removedIndexPaths.appendContentsOf(indexPaths)
+                    removedIndexPaths.append(contentsOf: indexPaths)
                 }, addedHandler: { (addedRect) -> Void in
                     guard let indexPaths = collectionView.pp_indexPathsForElementsInRect(addedRect) else { return }
-                    addedIndexPaths.appendContentsOf(indexPaths)
+                    addedIndexPaths.append(contentsOf: indexPaths)
             })
             
             let itemSize = (collectionViewLayout as! UICollectionViewFlowLayout).itemSize
             let targetSize = itemSize.scale(traitCollection.displayScale)
             
             if let assetsToStartCaching = assetsAtIndexPaths(addedIndexPaths) {
-                imageManager.startCachingImagesForAssets(assetsToStartCaching,
+                imageManager.startCachingImages(for: assetsToStartCaching,
                     targetSize: targetSize,
-                    contentMode: .AspectFill,
+                    contentMode: .aspectFill,
                     options: nil)
             }
             
             if let assetsToStopCaching = assetsAtIndexPaths(removedIndexPaths) {
-                imageManager.stopCachingImagesForAssets(assetsToStopCaching,
+                imageManager.stopCachingImages(for: assetsToStopCaching,
                     targetSize: targetSize,
-                    contentMode: .AspectFill,
+                    contentMode: .aspectFill,
                     options: nil)
             }
             
@@ -390,45 +390,45 @@ extension AssetsViewController {
         
     }
     
-    func computeDifferenceBetweenRect(oldRect: CGRect, andRect newRect: CGRect, removedHandler: (removedRect: CGRect) -> Void, addedHandler: (addedRect: CGRect) -> Void) {
-        if CGRectIntersectsRect(oldRect, newRect) {
-            let oldMaxY = CGRectGetMaxY(oldRect)
-            let oldMinY = CGRectGetMinY(oldRect)
-            let newMaxY = CGRectGetMaxY(newRect)
-            let newMinY = CGRectGetMinY(newRect)
+    func computeDifferenceBetweenRect(_ oldRect: CGRect, andRect newRect: CGRect, removedHandler: (_ removedRect: CGRect) -> Void, addedHandler: (_ addedRect: CGRect) -> Void) {
+        if oldRect.intersects(newRect) {
+            let oldMaxY = oldRect.maxY
+            let oldMinY = oldRect.minY
+            let newMaxY = newRect.maxY
+            let newMinY = newRect.minY
             
             if newMaxY > oldMaxY {
                 let rectToAdd = CGRect(x: newRect.origin.x, y: oldMaxY, width: newRect.size.width, height: (newMaxY - oldMaxY))
-                addedHandler(addedRect: rectToAdd)
+                addedHandler(rectToAdd)
             }
             
             if oldMinY > newMinY {
                 let rectToAdd = CGRect(x: newRect.origin.x, y: newMinY, width: newRect.size.width, height: (oldMinY - newMinY))
-                addedHandler(addedRect: rectToAdd)
+                addedHandler(rectToAdd)
             }
             
             if newMaxY < oldMaxY {
                 let rectToRemove = CGRect(x: newRect.origin.x, y: newMaxY, width: newRect.size.width, height: (oldMaxY - newMaxY))
-                removedHandler(removedRect: rectToRemove)
+                removedHandler(rectToRemove)
             }
             
             if oldMinY < newMinY {
                 let rectToRemove = CGRect(x: newRect.origin.x, y: oldMinY, width: newRect.size.width, height: (newMinY - oldMinY))
-                removedHandler(removedRect: rectToRemove)
+                removedHandler(rectToRemove)
             }
         } else {
-            addedHandler(addedRect: newRect)
-            removedHandler(removedRect: oldRect)
+            addedHandler(newRect)
+            removedHandler(oldRect)
         }
     }
     
-    func assetsAtIndexPaths(indexPaths: [NSIndexPath]) -> [PHAsset]? {
+    func assetsAtIndexPaths(_ indexPaths: [IndexPath]) -> [PHAsset]? {
         guard indexPaths.count > 0 else { return nil }
         
         var assets: [PHAsset] = []
         for indexPath in indexPaths {
             guard indexPath.item < assetsFetchResults.count else { break }
-            let asset: PHAsset = assetsFetchResults[indexPath.item] as! PHAsset
+            let asset: PHAsset = assetsFetchResults[indexPath.item]
             assets.append(asset)
         }
         
@@ -437,7 +437,7 @@ extension AssetsViewController {
 }
 
 extension AssetsViewController {
-    func selectItemAtIndexPath(indexPath: NSIndexPath) {
+    func selectItemAtIndexPath(_ indexPath: IndexPath) {
         func clearSelectedCell() {
             selectedIndexPaths.forEach({ (selectIndexPath) in
                 if selectIndexPath != indexPath {
@@ -447,18 +447,16 @@ extension AssetsViewController {
             selectedIndexPaths.removeAll()
         }
         
-        guard let asset = assetsFetchResults[indexPath.item] as? PHAsset else { return }
+        let asset = assetsFetchResults[indexPath.item]
         
         if photoPickerController.allowMultipleSelection {
             if isAutoDeselectEnable() && selectedAssets.count > 0 {
-//                selectedAssets.removeAtIndex(0)
-//                selectedIndexPaths.removeAtIndex(0)
                 if let lastSelectItemIndexPath = lastSelectItemIndexPath {
                     deselectItemAtIndexPath(lastSelectItemIndexPath, uncheckCell: true)
                 }
             }
             
-            if asset.mediaType == .Video {
+            if asset.mediaType == .video {
                 clearSelectedCell()
                 toggleHighQualityButtonHidden(true)
                 showVideoSelectAlert()
@@ -480,27 +478,28 @@ extension AssetsViewController {
         photoPickerController.delegate?.photoPickerController(photoPickerController, didSelectAsset: asset)
     }
 
-    func deselectItemAtIndexPath(indexPath: NSIndexPath, uncheckCell: Bool) {
-        guard photoPickerController.allowMultipleSelection, let asset = assetsFetchResults[indexPath.item] as? PHAsset else { return }
-        
-        if let index = selectedAssets.indexOf(asset) {
-            selectedAssets.removeAtIndex(index)
-            selectedIndexPaths.removeAtIndex(index)
+    func deselectItemAtIndexPath(_ indexPath: IndexPath, uncheckCell: Bool) {
+        guard photoPickerController.allowMultipleSelection else { return }
+        let asset = assetsFetchResults[indexPath.item]
+        if let index = selectedAssets.index(of: asset) {
+            selectedAssets.remove(at: index)
+            selectedIndexPaths.remove(at: index)
             lastSelectItemIndexPath = nil
             
             updateToolBar()
             photoPickerController.delegate?.photoPickerController(photoPickerController, didDeselectAsset: asset)
-            if let cell = collectionView?.cellForItemAtIndexPath(indexPath) as? AssetCell where uncheckCell {
+            if let cell = collectionView?.cellForItem(at: indexPath) as? AssetCell , uncheckCell {
                 cell.setChecked(false, animation: true)
             }
         }
     }
     
-    func shouldSelectItemAtIndexPath(indexPath: NSIndexPath, checked: Bool) -> Bool {
+    func shouldSelectItemAtIndexPath(_ indexPath: IndexPath, checked: Bool) -> Bool {
         if checked {
             return true
         }
-        if let asset = assetsFetchResults[indexPath.item] as? PHAsset, let shouldSelectAsset = photoPickerController.delegate?.photoPickerController(photoPickerController, shouldSelectAsset: asset) {
+        let asset = assetsFetchResults[indexPath.item]
+        if let shouldSelectAsset = photoPickerController.delegate?.photoPickerController(photoPickerController, shouldSelectAsset: asset) {
             guard shouldSelectAsset else { return false }
             if isAutoDeselectEnable() {
                 return true
@@ -519,48 +518,48 @@ extension AssetsViewController {
 
 //MARK: - UICollectionViewDelegateFlowLayout
 extension AssetsViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var numberOfColumns: Int = 0
         switch (currentDevice, currentOrientation) {
-        case (.Phone, .Landscape):
+        case (.phone, .landscape):
             numberOfColumns = AssetsNumberOfColumns.LandscapePhone
-        case (.Phone, .Portrait):
+        case (.phone, .portrait):
             numberOfColumns = AssetsNumberOfColumns.PortraitPhone
-        case (.Pad, .Landscape):
+        case (.pad, .landscape):
             numberOfColumns = AssetsNumberOfColumns.LandscapePad
-        case (.Pad, .Portrait):
+        case (.pad, .portrait):
             numberOfColumns = AssetsNumberOfColumns.PortraitPad
         default:
             numberOfColumns = AssetsNumberOfColumns.LandscapePhone
         }
         
-        let width: CGFloat = (CGRectGetWidth(view.frame) - 2.0 * CGFloat(numberOfColumns - 1)) / CGFloat(numberOfColumns)
+        let width: CGFloat = (view.frame.width - 2.0 * CGFloat(numberOfColumns - 1)) / CGFloat(numberOfColumns)
         
         return CGSize(width: width, height: width)
     }
 }
 
 extension AssetsViewController: PHPhotoLibraryChangeObserver {
-    func photoLibraryDidChange(changeInstance: PHChange) {
-        guard let collectionChanges = changeInstance.changeDetailsForFetchResult(self.assetsFetchResults) else { return }
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        guard let collectionChanges = changeInstance.changeDetails(for: self.assetsFetchResults as! PHFetchResult<PHObject>) else { return }
         
-        dispatch_async(dispatch_get_main_queue()) { [unowned self]() -> Void in
-            self.assetsFetchResults = collectionChanges.fetchResultAfterChanges
+        DispatchQueue.main.async { [unowned self]() -> Void in
+            self.assetsFetchResults = collectionChanges.fetchResultAfterChanges as! PHFetchResult<PHAsset>
             
             if collectionChanges.hasIncrementalChanges || collectionChanges.hasMoves {
                 self.collectionView?.reloadData()
             } else {
                 self.collectionView?.performBatchUpdates({ () -> Void in
-                    if let removedIndexes = collectionChanges.removedIndexes where removedIndexes.count > 0 {
-                        self.collectionView?.deleteItemsAtIndexPaths(removedIndexes.pp_indexPathsFromIndexesInSection(0))
+                    if let removedIndexes = collectionChanges.removedIndexes , removedIndexes.count > 0 {
+                        self.collectionView?.deleteItems(at: removedIndexes.pp_indexPathsFromIndexesInSection(0))
                     }
                     
-                    if let insertedIndexes = collectionChanges.insertedIndexes where insertedIndexes.count > 0 {
-                        self.collectionView?.insertItemsAtIndexPaths(insertedIndexes.pp_indexPathsFromIndexesInSection(0))
+                    if let insertedIndexes = collectionChanges.insertedIndexes , insertedIndexes.count > 0 {
+                        self.collectionView?.insertItems(at: insertedIndexes.pp_indexPathsFromIndexesInSection(0))
                     }
                     
-                    if let changedIndexes = collectionChanges.changedIndexes where changedIndexes.count > 0 {
-                        self.collectionView?.reloadItemsAtIndexPaths(changedIndexes.pp_indexPathsFromIndexesInSection(0))
+                    if let changedIndexes = collectionChanges.changedIndexes , changedIndexes.count > 0 {
+                        self.collectionView?.reloadItems(at: changedIndexes.pp_indexPathsFromIndexesInSection(0))
                     }
                     }, completion: nil)
             }

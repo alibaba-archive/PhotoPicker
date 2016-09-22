@@ -11,8 +11,8 @@ import UIKit
 let toolBarTintColor: UIColor = UIColor(red: 3/255.0, green: 169/255.0, blue: 244/255.0, alpha: 1.0)
 let greyTextColor: UIColor = UIColor(red: 191/255.0, green: 191/255.0, blue: 191/255.0, alpha: 1.0)
 let blueTextColor: UIColor = UIColor(red: 3/255.0, green: 169/255.0, blue: 244/255.0, alpha: 1.0)
-let AlbumCoverBorderColor: CGColorRef = UIColor.whiteColor().CGColor
-let currentBundle: NSBundle = NSBundle(forClass: PhotoPickerController.self)
+let AlbumCoverBorderColor: CGColor = UIColor.white.cgColor
+let currentBundle: Bundle = Bundle(for: PhotoPickerController.self)
 let selectedCheckMarkImageName = "checkmark_selected"
 let unselectedCheckMarkImageName = "checkmark_unselected"
 let toolbarNumberViewBackgroundImageName = "toolbar_numberview_background"
@@ -24,14 +24,14 @@ let albumCellIdentifier = "AlbumCell"
 let assetFooterViewIdentifier = "AssetFooterView"
 
 public enum PhotoPickerMediaType {
-    case Any
-    case Image
-    case Video
+    case any
+    case image
+    case video
 }
 
 enum PhotoPickerOrientation {
-    case Landscape
-    case Portrait
+    case landscape
+    case portrait
 }
 
 struct AssetsNumberOfColumns {
@@ -43,12 +43,12 @@ struct AssetsNumberOfColumns {
 
 var currentOrientation: PhotoPickerOrientation {
     get {
-        var orientation: PhotoPickerOrientation = .Portrait
-        switch UIApplication.sharedApplication().statusBarOrientation {
-        case .Portrait, .PortraitUpsideDown, .Unknown:
-            orientation = .Portrait
-        case .LandscapeLeft, .LandscapeRight:
-            orientation = .Landscape
+        var orientation: PhotoPickerOrientation = .portrait
+        switch UIApplication.shared.statusBarOrientation {
+        case .portrait, .portraitUpsideDown, .unknown:
+            orientation = .portrait
+        case .landscapeLeft, .landscapeRight:
+            orientation = .landscape
         }
         return orientation
     }
@@ -56,7 +56,7 @@ var currentOrientation: PhotoPickerOrientation {
 
 var currentDevice: UIUserInterfaceIdiom {
     get {
-        return UIDevice.currentDevice().userInterfaceIdiom
+        return UIDevice.current.userInterfaceIdiom
     }
 }
 
