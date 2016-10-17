@@ -142,39 +142,17 @@ class AssetsViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDelegate
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let photoBrowser = PhotoBrowser()
-        let indexSet = IndexSet(integersIn: 0..<assetsFetchResults.count)
-        let assets = assetsFetchResults.objects(at: indexSet)
-        photoBrowser.assets = assets
-        photoBrowser.setCurrentIndex(to: indexPath.row)
-//        var photos: [Photo] = []
-//
-//        func appendPhoto(_ asset: PHAsset) {
-//            let options = PHImageRequestOptions()
-//            options.deliveryMode = .highQualityFormat
-//            options.isSynchronous = true
-//            imageManager.requestImageData(for: asset, options: options) { (data, dataUTI, orientation, info) in
-//                guard let imageData = data else { return }
-//                let image = UIImage(data: imageData, scale: 1.0)
-//                let photo = Photo.init(image: image)
-//                photos.append(photo)
-//            }
-//        }
-//        let currentIndex = selectedIndexPaths.index(of: indexPath)
-//        if currentIndex == nil {
-//            let asset = assetsFetchResults[indexPath.item]
-//            appendPhoto(asset)
-//        }
-//        for asset in selectedAssets {
-//            appendPhoto(asset)
-//        }
-//        
-//        photoBrowser.photos = photos
-//        if let index = currentIndex {
-//            photoBrowser.setCurrentIndex(to: index)
-//        }
-        
-        self.present(photoBrowser, animated: true, completion: nil)
+        if photoPickerController.allowMultipleSelection {
+            let photoBrowser = PhotoBrowser()
+            let indexSet = IndexSet(integersIn: 0..<assetsFetchResults.count)
+            let assets = assetsFetchResults.objects(at: indexSet)
+            photoBrowser.assets = assets
+            photoBrowser.setCurrentIndex(to: indexPath.row)
+            self.present(photoBrowser, animated: true, completion: nil)
+        } else {
+            let asset = assetsFetchResults[indexPath.item]
+            photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: [asset], needHighQualityImage: true)
+        }
     }
 }
 

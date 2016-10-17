@@ -37,7 +37,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		EB3180561D8CE52A00443236 /* PhotoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = PhotoPicker.framework; path = "/Users/StormXX/Library/Developer/Xcode/DerivedData/PhotoPicker-bbteokqnmyjswzdsbkhwexeojvbd/Build/Products/Debug-iphonesimulator/PhotoPicker.framework"; sourceTree = "<absolute>"; };
 		EB31805A1D8CE55D00443236 /* PhotoBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotoBrowser.framework; path = Carthage/Build/iOS/PhotoBrowser.framework; sourceTree = "<group>"; };
 		EB31805D1D8CE59C00443236 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
 		EB7B2C071D9A6558007878B8 /* PhotoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotoPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,7 +69,6 @@
 				EB7B2C071D9A6558007878B8 /* PhotoPicker.framework */,
 				EB31805D1D8CE59C00443236 /* Kingfisher.framework */,
 				EB31805A1D8CE55D00443236 /* PhotoBrowser.framework */,
-				EB3180561D8CE52A00443236 /* PhotoPicker.framework */,
 				EBA70AEC1C7EA94B0089ECD7 /* PhotoPickerDemo */,
 				EBA70AEB1C7EA94B0089ECD7 /* Products */,
 			);

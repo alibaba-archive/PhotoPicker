@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         ]
         let photoPickerController = PhotoPickerController(localizedStrings: localizedString)
         photoPickerController.delegate = self
-        photoPickerController.allowMultipleSelection = true
+        photoPickerController.allowMultipleSelection = false
         photoPickerController.maximumNumberOfSelection = 3
         self.present(photoPickerController, animated: true, completion: nil)
     }
