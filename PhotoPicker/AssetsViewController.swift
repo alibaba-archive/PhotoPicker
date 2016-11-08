@@ -13,7 +13,7 @@ import PhotoBrowser
 class AssetsViewController: UICollectionViewController {
     
     //MARK: - public property
-    var photoPickerController: PhotoPickerController!
+    weak var photoPickerController: PhotoPickerController!
     var selectedAssets: [PHAsset] = [] {
         didSet {
             updateHighQualityImageSize()

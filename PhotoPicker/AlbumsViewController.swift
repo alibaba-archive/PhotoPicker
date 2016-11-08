@@ -12,7 +12,7 @@ import Photos
 class AlbumsViewController: UITableViewController {
     
     //MARK: - public property
-    var photoPickerController: PhotoPickerController!
+    weak var photoPickerController: PhotoPickerController!
     
     //MARK: - private property
     fileprivate var fetchedResults: [PHFetchResult<PHAssetCollection>] = []
@@ -105,15 +105,15 @@ extension AlbumsViewController {
         
         let smartAlbums = fetchedResults[0]
         let userAlbums = fetchedResults[1]
-        smartAlbums.enumerateObjects(options: .concurrent) { (assetCollection, index, stop) in
+        smartAlbums.enumerateObjects(options: .concurrent) { [weak self] (assetCollection, index, stop) in
             if assetCollectionsSubTypes.contains(assetCollection.assetCollectionSubtype) {
-                self.assetCollections.append(assetCollection)
+                self?.assetCollections.append(assetCollection)
             }
         }
 
-        userAlbums.enumerateObjects(options: .concurrent) { (assetCollection, index, stop) in
+        userAlbums.enumerateObjects(options: .concurrent) {  [weak self] (assetCollection, index, stop) in
             if assetCollectionsSubTypes.contains(assetCollection.assetCollectionSubtype) {
-                self.assetCollections.append(assetCollection)
+                self?.assetCollections.append(assetCollection)
             }
         }
     }
