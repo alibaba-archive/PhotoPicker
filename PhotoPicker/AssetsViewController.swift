@@ -52,16 +52,16 @@ class AssetsViewController: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         navigationItem.title = assetCollection.localizedTitle
         navigationItem.prompt = photoPickerController.prompt
         
         collectionView?.allowsMultipleSelection = photoPickerController.allowMultipleSelection
-        
         collectionView?.reloadData()
-        
+
         if assetsFetchResults.count > 0 && isMovingToParentViewController {
             let indexPath = IndexPath(item: assetsFetchResults.count - 1, section: 0)
+            collectionView?.layoutIfNeeded()
             collectionView?.scrollToItem(at: indexPath, at: .top, animated: false)
         }
     }
