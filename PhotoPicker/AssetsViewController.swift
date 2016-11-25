@@ -515,7 +515,7 @@ extension AssetsViewController: UICollectionViewDelegateFlowLayout {
             numberOfColumns = AssetsNumberOfColumns.LandscapePhone
         }
         
-        let width: CGFloat = (view.frame.width - 2.0 * CGFloat(numberOfColumns - 1)) / CGFloat(numberOfColumns)
+        let width: CGFloat = floor((view.frame.width - 2.0 * CGFloat(numberOfColumns - 1)) / CGFloat(numberOfColumns))
         
         return CGSize(width: width, height: width)
     }

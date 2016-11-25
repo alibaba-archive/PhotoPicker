@@ -36,9 +36,9 @@ enum PhotoPickerOrientation {
 
 struct AssetsNumberOfColumns {
     static let PortraitPhone: Int = 4
-    static let PortraitPad: Int = 7
-    static let LandscapePhone: Int = 7
-    static let LandscapePad: Int = 12
+    static let PortraitPad: Int = 5
+    static let LandscapePhone: Int = 6
+    static let LandscapePad: Int = 7
 }
 
 var currentOrientation: PhotoPickerOrientation {

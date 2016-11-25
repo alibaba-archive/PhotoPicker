@@ -30,8 +30,8 @@ class ViewController: UIViewController {
         ]
         let photoPickerController = PhotoPickerController(localizedStrings: localizedString)
         photoPickerController.delegate = self
-        photoPickerController.allowMultipleSelection = false
-        photoPickerController.maximumNumberOfSelection = 3
+        photoPickerController.allowMultipleSelection = true
+        photoPickerController.maximumNumberOfSelection = 9
         self.present(photoPickerController, animated: true, completion: nil)
     }
     override func didReceiveMemoryWarning() {
