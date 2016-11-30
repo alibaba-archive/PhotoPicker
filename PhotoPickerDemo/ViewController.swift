@@ -32,7 +32,10 @@ class ViewController: UIViewController {
         photoPickerController.delegate = self
         photoPickerController.allowMultipleSelection = true
         photoPickerController.maximumNumberOfSelection = 9
-        self.present(photoPickerController, animated: true, completion: nil)
+        photoPickerController.navigationController?.modalPresentationStyle = .formSheet
+        let nav = UINavigationController(rootViewController: photoPickerController)
+//        nav.modalPresentationStyle = .formSheet
+        navigationController?.present(nav, animated: true, completion: nil)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

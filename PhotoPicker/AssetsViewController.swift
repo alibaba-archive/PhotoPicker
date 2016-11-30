@@ -36,10 +36,13 @@ class AssetsViewController: UICollectionViewController {
     fileprivate var sendBarItem: UIBarButtonItem!
     fileprivate var needHighQuality: Bool = false
     fileprivate var selectedIndexPaths: [IndexPath] = []
+    fileprivate var isFirstLoading: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        collectionView?.layoutIfNeeded()
+        view.layoutIfNeeded()
         setupCancelButton()
         setupToolBar()
         resetCachedAssets()
@@ -74,6 +77,10 @@ class AssetsViewController: UICollectionViewController {
         super.viewDidAppear(animated)
         
         updateCachedAssets()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -514,9 +521,9 @@ extension AssetsViewController: UICollectionViewDelegateFlowLayout {
         default:
             numberOfColumns = AssetsNumberOfColumns.LandscapePhone
         }
-        
-        let width: CGFloat = floor((view.frame.width - 2.0 * CGFloat(numberOfColumns - 1)) / CGFloat(numberOfColumns))
-        
+
+        let containerViewWidth = photoPickerController.view.frame.width
+        let width: CGFloat = floor((containerViewWidth - 2.0 * CGFloat(numberOfColumns - 1)) / CGFloat(numberOfColumns))
         return CGSize(width: width, height: width)
     }
 }

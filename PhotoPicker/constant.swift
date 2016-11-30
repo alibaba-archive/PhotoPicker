@@ -38,7 +38,7 @@ struct AssetsNumberOfColumns {
     static let PortraitPhone: Int = 4
     static let PortraitPad: Int = 5
     static let LandscapePhone: Int = 6
-    static let LandscapePad: Int = 7
+    static let LandscapePad: Int = 6
 }
 
 var currentOrientation: PhotoPickerOrientation {
