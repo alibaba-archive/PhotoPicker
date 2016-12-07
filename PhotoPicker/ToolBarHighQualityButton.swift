@@ -9,6 +9,7 @@
 import UIKit
 
 let imageViewWidth: CGFloat = 18
+typealias HighQualityButtonAction = (Bool) -> Void
 class ToolBarHighQualityButton: UIView {
     
     weak var assetsViewController: AssetsViewController!
@@ -48,6 +49,7 @@ class ToolBarHighQualityButton: UIView {
     fileprivate var imageView: UIImageView!
     fileprivate var titleLabel: UILabel!
     fileprivate var tap: UITapGestureRecognizer!
+    var action: HighQualityButtonAction?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,7 +58,7 @@ class ToolBarHighQualityButton: UIView {
         addSubview(titleLabel)
         setupConstraints()
     }
-    
+
     func setupProperty() {
         imageView = UIImageView(frame: CGRect.zero)
         imageView.image = UIImage(named: toolbarHighQualityImageUnCheckedImageName, in: currentBundle, compatibleWith: nil)
@@ -86,6 +88,7 @@ class ToolBarHighQualityButton: UIView {
     
     func tapped(_ recognizer: UIGestureRecognizer) {
         checked = !checked
+        action?(checked)
     }
 
     required init?(coder aDecoder: NSCoder) {

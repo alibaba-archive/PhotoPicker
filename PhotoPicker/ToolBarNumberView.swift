@@ -50,12 +50,10 @@ class ToolBarNumberView: UIView {
         UIView.animate(withDuration: 0.1, animations: { [unowned self]() -> Void in
             self.imageView.transform = CGAffineTransform(scaleX: 0, y: 0)
         }, completion: { (finished) -> Void in
-            if finished {
-                UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10.0, options: [], animations: { () -> Void in
-                    self.imageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                    }, completion: nil)
-            }
-        }) 
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10.0, options: [], animations: { () -> Void in
+                self.imageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            }, completion: nil)
+        })
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -34,9 +34,9 @@ class AssetsViewController: UICollectionViewController {
     fileprivate var toolbarNumberView: ToolBarNumberView!
     fileprivate var toolbarHighQualityButton: ToolBarHighQualityButton!
     fileprivate var sendBarItem: UIBarButtonItem!
-    fileprivate var needHighQuality: Bool = false
     fileprivate var selectedIndexPaths: [IndexPath] = []
     fileprivate var isFirstLoading: Bool = true
+    fileprivate weak var photoBrowserHighQualityButton: ToolBarHighQualityButton?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -151,10 +151,36 @@ class AssetsViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if photoPickerController.allowMultipleSelection {
             let photoBrowser = PhotoBrowser()
+            photoBrowser.currentIndex = indexPath.item
+            // set isFrom PhotoPicker
+            photoBrowser.isFromPhotoPicker = true
+            photoBrowser.selectedIndex = selectedIndexPaths.map { return $0.item }
+            // action
+            let highQualityButton = ToolBarHighQualityButton(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 150, height: 21.0)))
+            highQualityButton.assetsViewController = self
+            highQualityButton.checked = self.toolbarHighQualityButton.checked
+            if highQualityButton.checked {
+                highQualityButton.highqualityImageSize = self.getImageSize(at: photoBrowser.currentIndex)
+            }
+            highQualityButton.action = { (checked) in
+                self.toolbarHighQualityButton.checked = checked
+                if checked {
+                    highQualityButton.highqualityImageSize = self.getImageSize(at: photoBrowser.currentIndex)
+                }
+            }
+            photoBrowserHighQualityButton = highQualityButton
+            let barItem = UIBarButtonItem(customView: highQualityButton)
+            let actionItem = PBActionBarItem(barButtonItem: barItem)
+            let middleEmptyItem = PBActionBarItem(title: "", style: .plain)
+            let rightEmptyItem = PBActionBarItem(title: "", style: .plain)
+            photoBrowser.actionItems = [actionItem, middleEmptyItem, rightEmptyItem]
+
+            // configuration
             let indexSet = IndexSet(integersIn: 0..<assetsFetchResults.count)
             let assets = assetsFetchResults.objects(at: indexSet)
             photoBrowser.assets = assets
-            photoBrowser.setCurrentIndex(to: indexPath.row)
+            photoBrowser.setCurrentIndex(to: indexPath.item)
+            photoBrowser.photoBrowserDelegate = self
             self.present(photoBrowser, animated: true, completion: nil)
         } else {
             let asset = assetsFetchResults[indexPath.item]
@@ -172,6 +198,10 @@ extension AssetsViewController {
     
     func cancelButtonTapped(_ sender: UIBarButtonItem) {
         photoPickerController.delegate?.photoPickerControllerDidCancel(photoPickerController)
+    }
+
+    func photoBrowserOriginButtonTapped() {
+        print("wtf")
     }
 }
 
@@ -222,6 +252,19 @@ extension AssetsViewController {
             })
         }
         self.toolbarHighQualityButton.highqualityImageSize = size
+    }
+
+    func getImageSize(at index: Int) -> Int {
+        var size: Int = 0
+        let asset = assetsFetchResults[index]
+        let options = PHImageRequestOptions()
+        options.isSynchronous = true
+        PHImageManager.default().requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) -> Void in
+            if let data = imageData {
+                size += data.count
+            }
+        })
+        return size
     }
 
     func isVideoAsset(_ indexPath: IndexPath?) -> Bool {
@@ -298,8 +341,12 @@ extension AssetsViewController {
         let alertController = UIAlertController(title: nil, message: String(format: localizedString["PhotoPicker.MaximumNumberOfSelection.Alert"]!, maximumNumberOfSelection), preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: localizedString["PhotoPicker.Cancel"], style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
-        
-        navigationController?.present(alertController, animated: true, completion: nil)
+
+        if let presentedViewController = navigationController?.presentedViewController {
+            presentedViewController.present(alertController, animated: true, completion: nil)
+        } else {
+            navigationController?.present(alertController, animated: true, completion: nil)
+        }
     }
 }
 
@@ -426,15 +473,16 @@ extension AssetsViewController {
 }
 
 extension AssetsViewController {
+    func clearSelectedCell(at indexPath: IndexPath) {
+        selectedIndexPaths.forEach({ (selectIndexPath) in
+            if selectIndexPath != indexPath {
+                deselectItemAtIndexPath(selectIndexPath, uncheckCell: true)
+            }
+        })
+        selectedIndexPaths.removeAll()
+    }
+
     func selectItemAtIndexPath(_ indexPath: IndexPath) {
-        func clearSelectedCell() {
-            selectedIndexPaths.forEach({ (selectIndexPath) in
-                if selectIndexPath != indexPath {
-                    deselectItemAtIndexPath(selectIndexPath, uncheckCell: true)
-                }
-            })
-            selectedIndexPaths.removeAll()
-        }
         
         let asset = assetsFetchResults[indexPath.item]
         
@@ -446,11 +494,11 @@ extension AssetsViewController {
             }
             
             if asset.mediaType == .video {
-                clearSelectedCell()
+                clearSelectedCell(at: indexPath)
                 toggleHighQualityButtonHidden(true)
                 showVideoSelectAlert()
             } else if isVideoAsset(lastSelectItemIndexPath) {
-                clearSelectedCell()
+                clearSelectedCell(at: indexPath)
                 toggleHighQualityButtonHidden(false)
             } else {
                 toggleHighQualityButtonHidden(false)
@@ -554,6 +602,30 @@ extension AssetsViewController: PHPhotoLibraryChangeObserver {
             }
             
             self.resetCachedAssets()
+        }
+    }
+}
+
+extension AssetsViewController: PhotoBrowserDelegate {
+    func photoBrowser(_ browser: PhotoBrowser, canSelectPhotoAtIndex index: Int) -> Bool {
+        let indexPath = IndexPath(item: index, section: 0)
+        let checked = selectedIndexPaths.contains(indexPath)
+        return shouldSelectItemAtIndexPath(indexPath, checked: checked)
+    }
+
+    func photoBrowser(_ browser: PhotoBrowser, didSelectPhotoAtIndex index: Int) {
+        let indexPath = IndexPath(item: index, section: 0)
+        let checked = selectedIndexPaths.contains(indexPath)
+        if !checked {
+            selectItemAtIndexPath(indexPath)
+        } else {
+            deselectItemAtIndexPath(indexPath, uncheckCell: true)
+        }
+    }
+
+    func photoBrowser(_ browser: PhotoBrowser, didShowPhotoAtIndex index: Int) {
+        if let button = photoBrowserHighQualityButton, button.checked {
+            button.highqualityImageSize = getImageSize(at: index)
         }
     }
 }
