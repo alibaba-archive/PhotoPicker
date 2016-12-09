@@ -187,20 +187,20 @@
                                                     </constraints>
                                                 </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P7r-Sk-V6h">
-                                                    <rect key="frame" x="38" y="4" width="36" height="44"/>
+                                                    <rect key="frame" x="18" y="0.0" width="60" height="48"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="36" id="jgd-Hc-8Cr"/>
-                                                        <constraint firstAttribute="height" constant="44" id="pTh-qz-sXm"/>
+                                                        <constraint firstAttribute="width" constant="60" id="jgd-Hc-8Cr"/>
+                                                        <constraint firstAttribute="height" constant="48" id="pTh-qz-sXm"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="5Wg-fA-8qV" secondAttribute="trailing" constant="4" id="Ebx-iE-cM7"/>
-                                                <constraint firstAttribute="trailing" secondItem="P7r-Sk-V6h" secondAttribute="trailing" constant="4" id="Rbx-dc-iIM"/>
+                                                <constraint firstAttribute="trailing" secondItem="P7r-Sk-V6h" secondAttribute="trailing" id="Rbx-dc-iIM"/>
                                                 <constraint firstItem="5Wg-fA-8qV" firstAttribute="top" secondItem="pNO-2d-B21" secondAttribute="top" constant="4" id="gGA-0L-ucx"/>
-                                                <constraint firstItem="P7r-Sk-V6h" firstAttribute="top" secondItem="pNO-2d-B21" secondAttribute="top" constant="4" id="vi4-Pt-TZD"/>
+                                                <constraint firstItem="P7r-Sk-V6h" firstAttribute="top" secondItem="pNO-2d-B21" secondAttribute="top" id="vi4-Pt-TZD"/>
                                             </constraints>
                                         </view>
                                     </subviews>
