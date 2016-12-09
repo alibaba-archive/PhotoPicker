@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -153,7 +153,7 @@
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VlG-ZK-GnM">
-                                                    <rect key="frame" x="23" y="3.5" width="50" height="14.5"/>
+                                                    <rect key="frame" x="23" y="3" width="50" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -186,11 +186,21 @@
                                                         <constraint firstAttribute="height" constant="24" id="GTk-uk-OYO"/>
                                                     </constraints>
                                                 </imageView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P7r-Sk-V6h">
+                                                    <rect key="frame" x="38" y="4" width="36" height="44"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="36" id="jgd-Hc-8Cr"/>
+                                                        <constraint firstAttribute="height" constant="44" id="pTh-qz-sXm"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="5Wg-fA-8qV" secondAttribute="trailing" constant="4" id="Ebx-iE-cM7"/>
+                                                <constraint firstAttribute="trailing" secondItem="P7r-Sk-V6h" secondAttribute="trailing" constant="4" id="Rbx-dc-iIM"/>
                                                 <constraint firstItem="5Wg-fA-8qV" firstAttribute="top" secondItem="pNO-2d-B21" secondAttribute="top" constant="4" id="gGA-0L-ucx"/>
+                                                <constraint firstItem="P7r-Sk-V6h" firstAttribute="top" secondItem="pNO-2d-B21" secondAttribute="top" constant="4" id="vi4-Pt-TZD"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -212,6 +222,7 @@
                                     <outlet property="checkMarkImageView" destination="5Wg-fA-8qV" id="6sG-bx-TlU"/>
                                     <outlet property="imageView" destination="V4v-uK-1Vj" id="xUS-NG-zgN"/>
                                     <outlet property="overlayView" destination="pNO-2d-B21" id="5R4-Z1-LsA"/>
+                                    <outlet property="tapGestureView" destination="P7r-Sk-V6h" id="l1V-Jj-G5V"/>
                                     <outlet property="videoIndicatorView" destination="tEl-5f-9Sx" id="4hS-Rn-V78"/>
                                 </connections>
                             </collectionViewCell>
