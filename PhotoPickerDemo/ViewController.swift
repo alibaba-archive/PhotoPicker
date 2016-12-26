@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         let photoPickerController = PhotoPickerController(localizedStrings: localizedString)
         photoPickerController.delegate = self
         photoPickerController.allowMultipleSelection = true
-        photoPickerController.maximumNumberOfSelection = 2
+        photoPickerController.maximumNumberOfSelection = 9
         photoPickerController.navigationController?.modalPresentationStyle = .formSheet
         let nav = UINavigationController(rootViewController: photoPickerController)
 //        nav.modalPresentationStyle = .formSheet

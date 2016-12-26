@@ -194,19 +194,20 @@ extension AlbumsViewController {
 
 extension AlbumsViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-        DispatchQueue.main.async { [unowned self]() -> Void in
-            var changedFetchResult = self.fetchedResults
+        DispatchQueue.main.async { [weak self]() -> Void in
+            guard let strongSelf = self else { return }
+            var changedFetchResult = strongSelf.fetchedResults
             
-            for (index, fetchResult) in self.fetchedResults.enumerated() {
+            for (index, fetchResult) in strongSelf.fetchedResults.enumerated() {
                 guard let changeDetails = changeInstance.changeDetails(for: fetchResult) else { continue }
                 changedFetchResult[index] = changeDetails.fetchResultAfterChanges
             }
             
-            if self.fetchedResults != changedFetchResult {
-                self.fetchedResults = changedFetchResult
+            if strongSelf.fetchedResults != changedFetchResult {
+                strongSelf.fetchedResults = changedFetchResult
                 
-                self.processAlbums()
-                self.tableView.reloadData()
+                strongSelf.processAlbums()
+                strongSelf.tableView.reloadData()
             }
         }
     }
