@@ -580,28 +580,29 @@ extension AssetsViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let collectionChanges = changeInstance.changeDetails(for: self.assetsFetchResults as! PHFetchResult<PHObject>) else { return }
         
-        DispatchQueue.main.async { [unowned self]() -> Void in
-            self.assetsFetchResults = collectionChanges.fetchResultAfterChanges as! PHFetchResult<PHAsset>
+        DispatchQueue.main.async { [weak self]() -> Void in
+            guard let strongSelf = self else { return }
+            strongSelf.assetsFetchResults = collectionChanges.fetchResultAfterChanges as! PHFetchResult<PHAsset>
             
             if collectionChanges.hasIncrementalChanges || collectionChanges.hasMoves {
-                self.collectionView?.reloadData()
+                strongSelf.collectionView?.reloadData()
             } else {
-                self.collectionView?.performBatchUpdates({ () -> Void in
+                strongSelf.collectionView?.performBatchUpdates({ () -> Void in
                     if let removedIndexes = collectionChanges.removedIndexes , removedIndexes.count > 0 {
-                        self.collectionView?.deleteItems(at: removedIndexes.pp_indexPathsFromIndexesInSection(0))
+                        strongSelf.collectionView?.deleteItems(at: removedIndexes.pp_indexPathsFromIndexesInSection(0))
                     }
                     
                     if let insertedIndexes = collectionChanges.insertedIndexes , insertedIndexes.count > 0 {
-                        self.collectionView?.insertItems(at: insertedIndexes.pp_indexPathsFromIndexesInSection(0))
+                        strongSelf.collectionView?.insertItems(at: insertedIndexes.pp_indexPathsFromIndexesInSection(0))
                     }
                     
                     if let changedIndexes = collectionChanges.changedIndexes , changedIndexes.count > 0 {
-                        self.collectionView?.reloadItems(at: changedIndexes.pp_indexPathsFromIndexesInSection(0))
+                        strongSelf.collectionView?.reloadItems(at: changedIndexes.pp_indexPathsFromIndexesInSection(0))
                     }
                     }, completion: nil)
             }
             
-            self.resetCachedAssets()
+            strongSelf.resetCachedAssets()
         }
     }
 }
