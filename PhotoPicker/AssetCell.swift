@@ -43,7 +43,7 @@ class AssetCell: UICollectionViewCell {
     }
 
     func setChecked(_ checked: Bool, animation: Bool) {
-        checkMarkImageView.image = checked ? UIImage(named: selectedCheckMarkImageName, in: currentBundle, compatibleWith: nil) : UIImage(named: unselectedCheckMarkImageName, in: currentBundle, compatibleWith: nil)
+        checkMarkImageView.image = checked ? UIImage(named: selectedCheckMarkImageName, in: currentBundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate) : UIImage(named: unselectedCheckMarkImageName, in: currentBundle, compatibleWith: nil)
         if !self.checked && checked && animation {
             UIView.animateKeyframes(withDuration: 0.33, delay: 0.0, options: [], animations: { () -> Void in
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5, animations: { [unowned self]() -> Void in
