@@ -224,8 +224,7 @@ extension AssetsViewController {
         let numberBarItem = UIBarButtonItem(customView: toolbarNumberView)
         let leftSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbarItems = [highqualityBarItem, leftSpace, numberBarItem, sendBarItem]
-        
-        navigationController?.toolbar.tintColor = toolBarTintColor
+        navigationController?.toolbar.tintColor = themeToolBarTintColor
         navigationController?.setToolbarHidden(false, animated: true)
     }
 
