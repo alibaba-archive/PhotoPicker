@@ -8,9 +8,9 @@
 
 import UIKit
 
-let toolBarTintColor: UIColor = UIColor(red: 3/255.0, green: 169/255.0, blue: 244/255.0, alpha: 1.0)
+var themeToolBarTintColor: UIColor = UIColor(red: 3/255.0, green: 169/255.0, blue: 244/255.0, alpha: 1.0)
 let greyTextColor: UIColor = UIColor(red: 191/255.0, green: 191/255.0, blue: 191/255.0, alpha: 1.0)
-let blueTextColor: UIColor = UIColor(red: 3/255.0, green: 169/255.0, blue: 244/255.0, alpha: 1.0)
+var themeTextColor: UIColor = UIColor(red: 3/255.0, green: 169/255.0, blue: 244/255.0, alpha: 1.0)
 let AlbumCoverBorderColor: CGColor = UIColor.white.cgColor
 let currentBundle: Bundle = Bundle(for: PhotoPickerController.self)
 let selectedCheckMarkImageName = "checkmark_selected"

@@ -24,7 +24,7 @@ open class PhotoPickerController: UIViewController {
     //MARK: - private property
     fileprivate var albumsNavigationController: UINavigationController!
     
-    public init(localizedStrings: [String: String]) {
+    public init(localizedStrings: [String: String], themeColor: UIColor? = nil) {
         super.init(nibName:nil, bundle:nil)
         
         self.assetCollectionSubtypes = [.smartAlbumUserLibrary,
@@ -32,7 +32,11 @@ open class PhotoPickerController: UIViewController {
                                         .albumMyPhotoStream,
                                         .albumCloudShared,
                                         .albumRegular]
-        
+
+        if let color = themeColor {
+            themeToolBarTintColor = color
+            themeTextColor = color
+        }
         setupAlbumsViewController()
         localizedString = localizedStrings
         
@@ -54,7 +58,6 @@ open class PhotoPickerController: UIViewController {
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
     }
 

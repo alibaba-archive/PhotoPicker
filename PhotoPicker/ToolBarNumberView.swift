@@ -36,7 +36,7 @@ class ToolBarNumberView: UIView {
     
     func setupProperty() {
         imageView = UIImageView(frame: bounds)
-        imageView.image = UIImage(named: toolbarNumberViewBackgroundImageName, in: currentBundle, compatibleWith: nil)
+        imageView.image = UIImage(named: toolbarNumberViewBackgroundImageName, in: currentBundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate)
         imageView.isHidden = true
         
         numberLabel = UILabel(frame: bounds)
