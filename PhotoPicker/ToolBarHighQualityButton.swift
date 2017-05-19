@@ -15,7 +15,6 @@ class ToolBarHighQualityButton: UIView {
     weak var assetsViewController: AssetsViewController!
     
     //MARK: - public property
-    var themeColor: UIColor?
     var checked: Bool = false {
         didSet {
             if checked {

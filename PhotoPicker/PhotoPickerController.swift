@@ -24,7 +24,7 @@ open class PhotoPickerController: UIViewController {
     //MARK: - private property
     fileprivate var albumsNavigationController: UINavigationController!
     
-    public init(localizedStrings: [String: String], themeColor: UIColor? = nil) {
+    public init(localizedStrings: [String: String]) {
         super.init(nibName:nil, bundle:nil)
         
         self.assetCollectionSubtypes = [.smartAlbumUserLibrary,
@@ -33,7 +33,7 @@ open class PhotoPickerController: UIViewController {
                                         .albumCloudShared,
                                         .albumRegular]
 
-        if let color = themeColor {
+        if let color = PhotoPickerThemeManager.shared.themeColor {
             themeToolBarTintColor = color
             themeTextColor = color
         }
@@ -68,5 +68,9 @@ open class PhotoPickerController: UIViewController {
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    public static func updatePhotoPickerTheme(themeColor: UIColor) {
+        PhotoPickerThemeManager.shared.themeColor = themeColor
     }
 }
