@@ -32,7 +32,11 @@ open class PhotoPickerController: UIViewController {
                                         .albumMyPhotoStream,
                                         .albumCloudShared,
                                         .albumRegular]
-        
+
+        if let color = PhotoPickerThemeManager.shared.themeColor {
+            themeToolBarTintColor = color
+            themeTextColor = color
+        }
         setupAlbumsViewController()
         localizedString = localizedStrings
         
@@ -54,7 +58,6 @@ open class PhotoPickerController: UIViewController {
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
     }
 
@@ -65,5 +68,9 @@ open class PhotoPickerController: UIViewController {
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    public static func updatePhotoPickerTheme(themeColor: UIColor) {
+        PhotoPickerThemeManager.shared.themeColor = themeColor
     }
 }

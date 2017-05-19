@@ -18,8 +18,8 @@ class ToolBarHighQualityButton: UIView {
     var checked: Bool = false {
         didSet {
             if checked {
-                imageView.image = UIImage(named: toolbarHighQualityImageCheckedImageName, in: currentBundle, compatibleWith: nil)
-                titleLabel.textColor = blueTextColor
+                imageView.image = UIImage(named: toolbarHighQualityImageCheckedImageName, in: currentBundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate)
+                titleLabel.textColor = themeTextColor
                 assetsViewController.updateHighQualityImageSize()
             } else {
                 imageView.image = UIImage(named: toolbarHighQualityImageUnCheckedImageName, in: currentBundle, compatibleWith: nil)
