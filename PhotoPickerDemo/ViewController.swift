@@ -37,9 +37,6 @@ class ViewController: UIViewController {
 //        nav.modalPresentationStyle = .formSheet
         navigationController?.present(nav, animated: true, completion: nil)
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
 }
 
 extension ViewController: PhotoPickerDelegate {

@@ -86,7 +86,7 @@ class ToolBarHighQualityButton: UIView {
         NSLayoutConstraint.activate(horizontalConstraints + constraints)
     }
     
-    func tapped(_ recognizer: UIGestureRecognizer) {
+    @objc func tapped(_ recognizer: UIGestureRecognizer) {
         checked = !checked
         action?(checked)
     }

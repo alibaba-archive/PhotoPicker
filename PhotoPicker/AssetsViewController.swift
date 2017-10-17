@@ -191,12 +191,12 @@ class AssetsViewController: UICollectionViewController {
 
 //MARK: - response method
 extension AssetsViewController {
-    func sendButtonTapped() {
+    @objc func sendButtonTapped() {
         guard selectedAssets.count > 0 else { return }
         photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: selectedAssets, needHighQualityImage: toolbarHighQualityButton.checked)
     }
     
-    func cancelButtonTapped(_ sender: UIBarButtonItem) {
+    @objc func cancelButtonTapped(_ sender: UIBarButtonItem) {
         photoPickerController.delegate?.photoPickerControllerDidCancel(photoPickerController)
     }
 

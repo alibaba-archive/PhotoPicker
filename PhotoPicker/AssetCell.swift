@@ -31,7 +31,7 @@ class AssetCell: UICollectionViewCell {
         checkHandler = nil
     }
 
-    func tapGestureHandler(_ recognizer: UIGestureRecognizer) {
+    @objc func tapGestureHandler(_ recognizer: UIGestureRecognizer) {
         guard let handler = checkHandler else { return }
         if handler(checked) {
             setChecked(!checked, animation: true)

@@ -14,5 +14,5 @@ class PhotoPickerThemeManager {
 
     var themeColor: UIColor?
 
-    private init() {}
+    private init() { }
 }
