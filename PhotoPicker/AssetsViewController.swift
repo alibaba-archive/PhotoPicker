@@ -154,6 +154,7 @@ class AssetsViewController: UICollectionViewController {
             photoBrowser.currentIndex = indexPath.item
             // set isFrom PhotoPicker
             photoBrowser.isFromPhotoPicker = true
+            photoBrowser.isShowMoreButton = false
             photoBrowser.selectedIndex = selectedIndexPaths.map { return $0.item }
             // action
             let highQualityButton = ToolBarHighQualityButton(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 150, height: 21.0)))
