@@ -73,6 +73,10 @@ class ToolBarHighQualityButton: UIView {
     }
     
     func setupConstraints() {
+        if #available(iOS 11.0, *) {
+             self.heightAnchor.constraint(equalToConstant: 21.0).isActive = true
+        }
+        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
