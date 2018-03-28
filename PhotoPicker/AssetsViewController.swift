@@ -44,6 +44,9 @@ class AssetsViewController: UICollectionViewController {
         super.viewDidLoad()
 
         collectionView?.layoutIfNeeded()
+        if #available(iOS 10.0, *) {
+            collectionView?.isPrefetchingEnabled = false
+        }
         view.layoutIfNeeded()
         setupCancelButton()
         setupToolBar()
