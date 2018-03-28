@@ -98,11 +98,11 @@ class AssetsViewController: UICollectionViewController {
         let cell: AssetCell = collectionView.dequeueReusableCell(withReuseIdentifier: assetCellIdentifier, for: indexPath) as! AssetCell
         fillCell(cell, forIndexPath: indexPath)
         cell.addCheckHandler { [weak self] (checked) -> Bool in
-            guard let `self` = self , self.shouldSelectItemAtIndexPath(indexPath, checked: checked) else { return false }
+            guard let strongSelf = self , strongSelf.shouldSelectItemAtIndexPath(indexPath, checked: checked) else { return false }
             if !checked {
-                self.selectItemAtIndexPath(indexPath)
+                strongSelf.selectItemAtIndexPath(indexPath)
             } else {
-                self.deselectItemAtIndexPath(indexPath, uncheckCell: false)
+                strongSelf.deselectItemAtIndexPath(indexPath, uncheckCell: false)
             }
             return true
         }
