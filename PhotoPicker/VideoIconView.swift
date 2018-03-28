@@ -12,10 +12,6 @@ class VideoIconView: UIView {
 
     var iconColor: UIColor = UIColor.white
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
     override func draw(_ rect: CGRect) {
         iconColor.setFill()
         
@@ -25,7 +21,6 @@ class VideoIconView: UIView {
         trianglePath.addLine(to: CGPoint(x: maxX - midY, y: midY))
         trianglePath.close()
         trianglePath.fill()
-    
         
         let squarePath = UIBezierPath(roundedRect: CGRect(x: minX, y: minY, width: width - midY - 1.0, height: height), cornerRadius: 2.0)
         squarePath.fill()

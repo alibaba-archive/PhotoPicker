@@ -17,13 +17,12 @@ extension CGSize {
 extension UICollectionView {
     func pp_indexPathsForElementsInRect(_ rect: CGRect) -> [IndexPath]? {
         let allLayoutAttributes = self.collectionViewLayout.layoutAttributesForElements(in: rect)
-        guard let attributes = allLayoutAttributes , attributes.count > 0 else { return nil }
-        var indexPaths: [IndexPath] = []
-        for layoutAttributes in attributes {
-            let indexPath = layoutAttributes.indexPath
-            indexPaths.append(indexPath)
+        
+        guard let attributes = allLayoutAttributes , attributes.count > 0 else {
+            return nil
         }
-        return indexPaths
+        
+        return attributes.flatMap { $0.indexPath }
     }
 }
 

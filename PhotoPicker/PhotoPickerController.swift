@@ -19,7 +19,6 @@ open class PhotoPickerController: UIViewController {
     open var maximumNumberOfSelection: Int = 9
     open var mediaType: PhotoPickerMediaType = .any
     open var prompt: String?
-    var hasShowVideoAlert: Bool = false
     
     //MARK: - private property
     fileprivate var albumsNavigationController: UINavigationController!
@@ -54,16 +53,6 @@ open class PhotoPickerController: UIViewController {
         navigationController.didMove(toParentViewController: self)
         
         albumsNavigationController = navigationController
-    }
-
-    open override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
-
-    open override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     public required init?(coder aDecoder: NSCoder) {

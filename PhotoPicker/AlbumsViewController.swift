@@ -25,7 +25,6 @@ class AlbumsViewController: UITableViewController {
         tableView.rowHeight = 86.0
         loadAlbums()
         PHPhotoLibrary.shared().register(self)
-    
     }
     
     deinit {

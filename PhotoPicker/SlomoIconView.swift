@@ -12,10 +12,6 @@ class SlomoIconView: UIView {
 
     var iconColor: UIColor = UIColor.white
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     override func draw(_ rect: CGRect) {
         iconColor.setStroke()
         let width: CGFloat = 2.2

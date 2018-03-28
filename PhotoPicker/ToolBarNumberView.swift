@@ -47,10 +47,10 @@ class ToolBarNumberView: UIView {
     }
     
     func changeNumberAnimation() {
-        UIView.animate(withDuration: 0.1, animations: { [unowned self]() -> Void in
-            self.imageView.transform = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.1, animations: { [weak self] in
+            self?.imageView.transform = CGAffineTransform(scaleX: 0, y: 0)
         }, completion: { (finished) -> Void in
-            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10.0, options: [], animations: { () -> Void in
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10.0, options: [], animations: {
                 self.imageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             }, completion: nil)
         })
