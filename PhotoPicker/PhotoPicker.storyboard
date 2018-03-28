@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -203,13 +203,20 @@
                                                 <constraint firstItem="P7r-Sk-V6h" firstAttribute="top" secondItem="pNO-2d-B21" secondAttribute="top" id="vi4-Pt-TZD"/>
                                             </constraints>
                                         </view>
+                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KM1-HU-9e4">
+                                            <rect key="frame" x="-81" y="-25" width="240" height="128"/>
+                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
+                                        </view>
                                     </subviews>
                                 </view>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="KM1-HU-9e4" secondAttribute="bottom" id="3bJ-O6-gxb"/>
+                                    <constraint firstItem="KM1-HU-9e4" firstAttribute="leading" secondItem="6Ww-0p-UBG" secondAttribute="leading" id="8K1-lZ-sJT"/>
                                     <constraint firstItem="pNO-2d-B21" firstAttribute="leading" secondItem="6Ww-0p-UBG" secondAttribute="leading" id="8hO-sp-Vh1"/>
                                     <constraint firstItem="V4v-uK-1Vj" firstAttribute="top" secondItem="6Ww-0p-UBG" secondAttribute="top" id="9pn-nO-Mg8"/>
                                     <constraint firstItem="V4v-uK-1Vj" firstAttribute="leading" secondItem="6Ww-0p-UBG" secondAttribute="leading" id="E2E-85-71h"/>
                                     <constraint firstAttribute="bottom" secondItem="V4v-uK-1Vj" secondAttribute="bottom" id="ObY-6b-J3W"/>
+                                    <constraint firstAttribute="trailing" secondItem="KM1-HU-9e4" secondAttribute="trailing" id="QOw-Hz-AAX"/>
                                     <constraint firstItem="tEl-5f-9Sx" firstAttribute="trailing" secondItem="6Ww-0p-UBG" secondAttribute="trailing" id="RSY-vq-AOk"/>
                                     <constraint firstAttribute="trailing" secondItem="pNO-2d-B21" secondAttribute="trailing" id="YMZ-VZ-XUi"/>
                                     <constraint firstItem="tEl-5f-9Sx" firstAttribute="leading" secondItem="6Ww-0p-UBG" secondAttribute="leading" id="aHa-Gy-MBZ"/>
@@ -217,9 +224,11 @@
                                     <constraint firstItem="pNO-2d-B21" firstAttribute="top" secondItem="6Ww-0p-UBG" secondAttribute="top" id="d5P-Mi-qOc"/>
                                     <constraint firstItem="tEl-5f-9Sx" firstAttribute="bottom" secondItem="6Ww-0p-UBG" secondAttribute="bottom" id="ikP-ZN-uhS"/>
                                     <constraint firstAttribute="trailing" secondItem="V4v-uK-1Vj" secondAttribute="trailing" id="uSS-jt-Ejz"/>
+                                    <constraint firstItem="KM1-HU-9e4" firstAttribute="top" secondItem="6Ww-0p-UBG" secondAttribute="top" id="xGe-75-tFQ"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="checkMarkImageView" destination="5Wg-fA-8qV" id="6sG-bx-TlU"/>
+                                    <outlet property="disableView" destination="KM1-HU-9e4" id="12N-MT-fRZ"/>
                                     <outlet property="imageView" destination="V4v-uK-1Vj" id="xUS-NG-zgN"/>
                                     <outlet property="overlayView" destination="pNO-2d-B21" id="5R4-Z1-LsA"/>
                                     <outlet property="tapGestureView" destination="P7r-Sk-V6h" id="l1V-Jj-G5V"/>
@@ -260,7 +269,6 @@
             <objects>
                 <navigationController storyboardIdentifier="AlbumsNavigationController" id="Rkt-nW-p4I" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="uVV-io-bmy">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>

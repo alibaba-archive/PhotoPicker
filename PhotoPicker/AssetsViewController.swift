@@ -36,6 +36,8 @@ class AssetsViewController: UICollectionViewController {
     fileprivate var sendBarItem: UIBarButtonItem!
     fileprivate var selectedIndexPaths: [IndexPath] = []
     fileprivate var isFirstLoading: Bool = true
+    fileprivate var canSelectVideo: Bool = true
+    fileprivate var canSelectImage: Bool = true
     fileprivate weak var photoBrowserHighQualityButton: ToolBarHighQualityButton?
 
     override func viewDidLoad() {
@@ -125,6 +127,10 @@ class AssetsViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDelegate
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell, cell.isDisabled == false else {
+            return
+        }
+        
         if photoPickerController.allowMultipleSelection {
             let photoBrowser = PhotoBrowser()
             photoBrowser.currentIndex = indexPath.item
@@ -265,9 +271,11 @@ extension AssetsViewController {
                 cell.imageView.image = image
         }
         
+        cell.setChecked(selectedIndexPaths.contains(indexPath), animation: false)
+
         if asset.mediaType == .video {
+            cell.disableView.isHidden = cell.checked || canSelectVideo
             cell.videoIndicatorView.isHidden = false
-            
             let minutes = Int(asset.duration / 60.0)
             let seconds = Int(ceil(asset.duration - 60.0 * Double(minutes)))
             cell.videoIndicatorView.timeLabel.text = String(format: "%02ld:%02ld", minutes, seconds)
@@ -278,9 +286,9 @@ extension AssetsViewController {
                 cell.showVideoIcon()
             }
         } else {
+            cell.disableView.isHidden = cell.checked || canSelectImage
             cell.videoIndicatorView.isHidden = true
         }
-        cell.setChecked(selectedIndexPaths.contains(indexPath), animation: false)
     }
     
     func isMaximumSelectionReached() -> Bool {
@@ -415,9 +423,22 @@ extension AssetsViewController {
 }
 
 extension AssetsViewController {
-    func clearFirstSelectCell() {
-        guard let first = selectedIndexPaths.first else { return }
-        deselectItemAtIndexPath(first, uncheckCell: true)
+    func updateDisableCells() {
+        collectionView?.visibleCells.flatMap {
+            $0 as? AssetCell
+        }.filter { cell in
+            return !selectedIndexPaths.contains(where: {
+                $0.item == cell.tag
+            })
+        }.forEach { cell in
+            let item = cell.tag
+            let asset = assetsFetchResults[item]
+            if asset.mediaType == .video {
+                cell.isDisabled = !canSelectVideo
+            } else {
+                cell.isDisabled = !canSelectImage
+            }
+        }
     }
     
     func clearSelectedCell(at indexPath: IndexPath) {
@@ -428,28 +449,32 @@ extension AssetsViewController {
         })
         selectedIndexPaths.removeAll()
     }
-
+    
     func selectItemAtIndexPath(_ indexPath: IndexPath) {
-        
         let asset = assetsFetchResults[indexPath.item]
         
         if photoPickerController.allowMultipleSelection {
             if asset.mediaType == .video {
                 clearSelectedCell(at: indexPath)
                 toggleHighQualityButtonHidden(true)
+                canSelectVideo = false
             } else if isVideoAsset(lastSelectItemIndexPath) {
                 clearSelectedCell(at: indexPath)
                 toggleHighQualityButtonHidden(false)
+                canSelectVideo = true
             } else {
-                if isMaximumSelectionReached() {
-                    clearFirstSelectCell()
-                }
                 toggleHighQualityButtonHidden(false)
+                canSelectVideo = true
             }
             
             selectedAssets.append(asset)
             selectedIndexPaths.append(indexPath)
+            
+            canSelectImage = !isMaximumSelectionReached()
+            
             lastSelectItemIndexPath = indexPath
+            
+            updateDisableCells()
             updateToolBar()
         } else {
             photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: [asset], needHighQualityImage: true)
@@ -465,7 +490,9 @@ extension AssetsViewController {
             selectedAssets.remove(at: index)
             selectedIndexPaths.remove(at: index)
             lastSelectItemIndexPath = nil
-            
+            canSelectVideo = true
+            canSelectImage = true
+            updateDisableCells()
             updateToolBar()
             photoPickerController.delegate?.photoPickerController(photoPickerController, didDeselectAsset: asset)
             if let cell = collectionView?.cellForItem(at: indexPath) as? AssetCell , uncheckCell {
@@ -478,6 +505,7 @@ extension AssetsViewController {
         if checked {
             return true
         }
+        
         let asset = assetsFetchResults[indexPath.item]
         
         guard let shouldSelectAsset = photoPickerController.delegate?.photoPickerController(photoPickerController, shouldSelectAsset: asset), shouldSelectAsset else {
