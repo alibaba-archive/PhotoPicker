@@ -498,7 +498,7 @@ extension AssetsViewController {
             updateDisableCells()
             updateToolBar()
             photoPickerController.delegate?.photoPickerController(photoPickerController, didDeselectAsset: asset)
-            if let cell = collectionView?.cellForItem(at: indexPath) as? AssetCell , uncheckCell {
+            if let cell = collectionView?.cellForItem(at: indexPath) as? AssetCell, uncheckCell {
                 cell.setChecked(false, animation: true)
             }
         }
@@ -508,8 +508,16 @@ extension AssetsViewController {
         if checked {
             return true
         }
-        
+    
         let asset = assetsFetchResults[indexPath.item]
+     
+        if asset.mediaType == .audio, !canSelectVideo {
+            return false
+        }
+
+        if asset.mediaType == .image, !canSelectImage {
+            return false
+        }
         
         guard let shouldSelectAsset = photoPickerController.delegate?.photoPickerController(photoPickerController, shouldSelectAsset: asset), shouldSelectAsset else {
             return false
@@ -585,6 +593,9 @@ extension AssetsViewController: PhotoBrowserDelegate {
         let checked = selectedIndexPaths.contains(indexPath)
         if !checked {
             selectItemAtIndexPath(indexPath)
+            if let cell = collectionView?.cellForItem(at: indexPath) as? AssetCell {
+                cell.setChecked(true, animation: true)
+            }
         } else {
             deselectItemAtIndexPath(indexPath, uncheckCell: true)
         }
@@ -594,5 +605,13 @@ extension AssetsViewController: PhotoBrowserDelegate {
         if let button = photoBrowserHighQualityButton, button.checked {
             button.highqualityImageSize = getImageSize(at: index)
         }
+        
+        guard index == browser.currentIndex else {
+            return
+        }
+        
+        let indexPath = IndexPath(item: index, section: 0)
+        let checked = selectedIndexPaths.contains(indexPath)
+        browser.enableSelect = self.shouldSelectItemAtIndexPath(indexPath, checked: checked)
     }
 }

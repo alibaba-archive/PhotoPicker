@@ -31,6 +31,7 @@ class AssetCell: UICollectionViewCell {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler(_:)))
         tapGestureView.isUserInteractionEnabled = true
         tapGestureView.addGestureRecognizer(tapGesture)
+        tapGestureView.isExclusiveTouch = true
     }
 
     override func prepareForReuse() {
