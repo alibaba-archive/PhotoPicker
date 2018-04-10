@@ -22,7 +22,7 @@ extension UICollectionView {
             return nil
         }
         
-        return attributes.flatMap { $0.indexPath }
+        return attributes.compactMap { $0.indexPath }
     }
 }
 

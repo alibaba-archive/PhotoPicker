@@ -427,7 +427,7 @@ extension AssetsViewController {
 
 extension AssetsViewController {
     func updateDisableCells() {
-        collectionView?.visibleCells.flatMap {
+        collectionView?.visibleCells.compactMap {
             $0 as? AssetCell
         }.filter { cell in
             return !selectedIndexPaths.contains(where: {
