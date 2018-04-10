@@ -36,12 +36,17 @@ class AssetsViewController: UICollectionViewController {
     fileprivate var sendBarItem: UIBarButtonItem!
     fileprivate var selectedIndexPaths: [IndexPath] = []
     fileprivate var isFirstLoading: Bool = true
+    fileprivate var canSelectVideo: Bool = true
+    fileprivate var canSelectImage: Bool = true
     fileprivate weak var photoBrowserHighQualityButton: ToolBarHighQualityButton?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         collectionView?.layoutIfNeeded()
+        if #available(iOS 10.0, *) {
+            collectionView?.isPrefetchingEnabled = false
+        }
         view.layoutIfNeeded()
         setupCancelButton()
         setupToolBar()
@@ -68,19 +73,11 @@ class AssetsViewController: UICollectionViewController {
             collectionView?.scrollToItem(at: indexPath, at: .top, animated: false)
         }
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         updateCachedAssets()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -92,27 +89,11 @@ class AssetsViewController: UICollectionViewController {
             })
         }
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     // MARK: UICollectionViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return assetsFetchResults.count
@@ -121,12 +102,12 @@ class AssetsViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: AssetCell = collectionView.dequeueReusableCell(withReuseIdentifier: assetCellIdentifier, for: indexPath) as! AssetCell
         fillCell(cell, forIndexPath: indexPath)
-        cell.addCheckHandler { [weak self](checked) -> Bool in
-            guard let weakSelf = self , weakSelf.shouldSelectItemAtIndexPath(indexPath, checked: checked) else { return false }
+        cell.addCheckHandler { [weak self] (checked) -> Bool in
+            guard let strongSelf = self , strongSelf.shouldSelectItemAtIndexPath(indexPath, checked: checked) else { return false }
             if !checked {
-                weakSelf.selectItemAtIndexPath(indexPath)
+                strongSelf.selectItemAtIndexPath(indexPath)
             } else {
-                weakSelf.deselectItemAtIndexPath(indexPath, uncheckCell: false)
+                strongSelf.deselectItemAtIndexPath(indexPath, uncheckCell: false)
             }
             return true
         }
@@ -149,6 +130,10 @@ class AssetsViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDelegate
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? AssetCell, cell.isDisabled == false else {
+            return
+        }
+        
         if photoPickerController.allowMultipleSelection {
             let photoBrowser = PhotoBrowser()
             photoBrowser.currentIndex = indexPath.item
@@ -201,9 +186,7 @@ extension AssetsViewController {
         photoPickerController.delegate?.photoPickerControllerDidCancel(photoPickerController)
     }
 
-    func photoBrowserOriginButtonTapped() {
-        print("wtf")
-    }
+    func photoBrowserOriginButtonTapped() {}
 }
 
 //MARK: - UI help method
@@ -271,15 +254,6 @@ extension AssetsViewController {
         guard let `indexPath` = indexPath else { return false }
         return assetsFetchResults[indexPath.item].mediaType == .video
     }
-
-    func showVideoSelectAlert() {
-        guard !photoPickerController.hasShowVideoAlert else { return }
-        let alertController = UIAlertController(title: nil, message: localizedString["PhotoPicker.VideoSelect.Alert"] ?? "", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: localizedString["PhotoPicker.OK"], style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
-        photoPickerController.hasShowVideoAlert = true
-    }
 }
 
 //MARK: - collection view help method
@@ -300,9 +274,11 @@ extension AssetsViewController {
                 cell.imageView.image = image
         }
         
+        cell.setChecked(selectedIndexPaths.contains(indexPath), animation: false)
+
         if asset.mediaType == .video {
+            cell.disableView.isHidden = cell.checked || canSelectVideo
             cell.videoIndicatorView.isHidden = false
-            
             let minutes = Int(asset.duration / 60.0)
             let seconds = Int(ceil(asset.duration - 60.0 * Double(minutes)))
             cell.videoIndicatorView.timeLabel.text = String(format: "%02ld:%02ld", minutes, seconds)
@@ -313,39 +289,16 @@ extension AssetsViewController {
                 cell.showVideoIcon()
             }
         } else {
+            cell.disableView.isHidden = cell.checked || canSelectImage
             cell.videoIndicatorView.isHidden = true
         }
-        cell.setChecked(selectedIndexPaths.contains(indexPath), animation: false)
     }
     
     func isMaximumSelectionReached() -> Bool {
-        let minimumNumberOfSelection = max(1, photoPickerController.minimumNumberOfSelection)
-        
-        if minimumNumberOfSelection <= photoPickerController.maximumNumberOfSelection {
+        if photoPickerController.minimumNumberOfSelection <= photoPickerController.maximumNumberOfSelection {
             return photoPickerController.maximumNumberOfSelection <= selectedAssets.count
         } else {
             return false
-        }
-    }
-    
-    func isMinimumSelectionFullfilled() -> Bool {
-        return photoPickerController.minimumNumberOfSelection <= selectedAssets.count
-    }
-    
-    func isAutoDeselectEnable() -> Bool {
-        return photoPickerController.maximumNumberOfSelection == 1 && photoPickerController.maximumNumberOfSelection >= photoPickerController.minimumNumberOfSelection
-    }
-    
-    func showMaximumSelectionReachedAlert() {
-        let maximumNumberOfSelection = photoPickerController.maximumNumberOfSelection
-        let alertController = UIAlertController(title: nil, message: String(format: localizedString["PhotoPicker.MaximumNumberOfSelection.Alert"]!, maximumNumberOfSelection), preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: localizedString["PhotoPicker.Cancel"], style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-
-        if let presentedViewController = navigationController?.presentedViewController {
-            presentedViewController.present(alertController, animated: true, completion: nil)
-        } else {
-            navigationController?.present(alertController, animated: true, completion: nil)
         }
     }
 }
@@ -473,6 +426,24 @@ extension AssetsViewController {
 }
 
 extension AssetsViewController {
+    func updateDisableCells() {
+        collectionView?.visibleCells.flatMap {
+            $0 as? AssetCell
+        }.filter { cell in
+            return !selectedIndexPaths.contains(where: {
+                $0.item == cell.tag
+            })
+        }.forEach { cell in
+            let item = cell.tag
+            let asset = assetsFetchResults[item]
+            if asset.mediaType == .video {
+                cell.isDisabled = !canSelectVideo
+            } else {
+                cell.isDisabled = !canSelectImage
+            }
+        }
+    }
+    
     func clearSelectedCell(at indexPath: IndexPath) {
         selectedIndexPaths.forEach({ (selectIndexPath) in
             if selectIndexPath != indexPath {
@@ -481,32 +452,32 @@ extension AssetsViewController {
         })
         selectedIndexPaths.removeAll()
     }
-
+    
     func selectItemAtIndexPath(_ indexPath: IndexPath) {
-        
         let asset = assetsFetchResults[indexPath.item]
         
         if photoPickerController.allowMultipleSelection {
-            if isAutoDeselectEnable() && selectedAssets.count > 0 {
-                if let lastSelectItemIndexPath = lastSelectItemIndexPath {
-                    deselectItemAtIndexPath(lastSelectItemIndexPath, uncheckCell: true)
-                }
-            }
-            
             if asset.mediaType == .video {
                 clearSelectedCell(at: indexPath)
                 toggleHighQualityButtonHidden(true)
-                showVideoSelectAlert()
+                canSelectVideo = false
             } else if isVideoAsset(lastSelectItemIndexPath) {
                 clearSelectedCell(at: indexPath)
                 toggleHighQualityButtonHidden(false)
+                canSelectVideo = true
             } else {
                 toggleHighQualityButtonHidden(false)
+                canSelectVideo = true
             }
             
             selectedAssets.append(asset)
             selectedIndexPaths.append(indexPath)
+            
+            canSelectImage = !isMaximumSelectionReached()
+            
             lastSelectItemIndexPath = indexPath
+            
+            updateDisableCells()
             updateToolBar()
         } else {
             photoPickerController.delegate?.photoPickerController(photoPickerController, didFinishPickingAssets: [asset], needHighQualityImage: true)
@@ -522,10 +493,12 @@ extension AssetsViewController {
             selectedAssets.remove(at: index)
             selectedIndexPaths.remove(at: index)
             lastSelectItemIndexPath = nil
-            
+            canSelectVideo = true
+            canSelectImage = true
+            updateDisableCells()
             updateToolBar()
             photoPickerController.delegate?.photoPickerController(photoPickerController, didDeselectAsset: asset)
-            if let cell = collectionView?.cellForItem(at: indexPath) as? AssetCell , uncheckCell {
+            if let cell = collectionView?.cellForItem(at: indexPath) as? AssetCell, uncheckCell {
                 cell.setChecked(false, animation: true)
             }
         }
@@ -535,21 +508,22 @@ extension AssetsViewController {
         if checked {
             return true
         }
+    
         let asset = assetsFetchResults[indexPath.item]
-        if let shouldSelectAsset = photoPickerController.delegate?.photoPickerController(photoPickerController, shouldSelectAsset: asset) {
-            guard shouldSelectAsset else { return false }
-            if isAutoDeselectEnable() {
-                return true
-            }
-            
-            if isMaximumSelectionReached() {
-                showMaximumSelectionReachedAlert()
-                return false
-            }
-            return true
-        } else {
+     
+        if asset.mediaType == .audio, !canSelectVideo {
             return false
         }
+
+        if asset.mediaType == .image, !canSelectImage {
+            return false
+        }
+        
+        guard let shouldSelectAsset = photoPickerController.delegate?.photoPickerController(photoPickerController, shouldSelectAsset: asset), shouldSelectAsset else {
+            return false
+        }
+        
+        return true
     }
 }
 
@@ -619,6 +593,9 @@ extension AssetsViewController: PhotoBrowserDelegate {
         let checked = selectedIndexPaths.contains(indexPath)
         if !checked {
             selectItemAtIndexPath(indexPath)
+            if let cell = collectionView?.cellForItem(at: indexPath) as? AssetCell {
+                cell.setChecked(true, animation: true)
+            }
         } else {
             deselectItemAtIndexPath(indexPath, uncheckCell: true)
         }
@@ -628,5 +605,13 @@ extension AssetsViewController: PhotoBrowserDelegate {
         if let button = photoBrowserHighQualityButton, button.checked {
             button.highqualityImageSize = getImageSize(at: index)
         }
+        
+        guard index == browser.currentIndex else {
+            return
+        }
+        
+        let indexPath = IndexPath(item: index, section: 0)
+        let checked = selectedIndexPaths.contains(indexPath)
+        browser.enableSelect = self.shouldSelectItemAtIndexPath(indexPath, checked: checked)
     }
 }

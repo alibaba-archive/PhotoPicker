@@ -14,16 +14,24 @@ class AssetCell: UICollectionViewCell {
     @IBOutlet weak var overlayView: UIView!
     @IBOutlet weak var checkMarkImageView: UIImageView!
     @IBOutlet weak var tapGestureView: UIView!
+    @IBOutlet weak var disableView: UIView!
     @IBOutlet weak var videoIndicatorView: VideoIndicatorView!
     fileprivate var checkHandler: ((_ checked: Bool) -> Bool)?
 
-    fileprivate var checked: Bool = false
-
+    var checked: Bool = false
+    
+    var isDisabled: Bool = false {
+        didSet {
+            disableView.isHidden = !isDisabled
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler(_:)))
         tapGestureView.isUserInteractionEnabled = true
         tapGestureView.addGestureRecognizer(tapGesture)
+        tapGestureView.isExclusiveTouch = true
     }
 
     override func prepareForReuse() {
