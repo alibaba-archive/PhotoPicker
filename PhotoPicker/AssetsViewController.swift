@@ -460,21 +460,19 @@ extension AssetsViewController {
             if asset.mediaType == .video {
                 clearSelectedCell(at: indexPath)
                 toggleHighQualityButtonHidden(true)
-                canSelectVideo = false
             } else if isVideoAsset(lastSelectItemIndexPath) {
                 clearSelectedCell(at: indexPath)
                 toggleHighQualityButtonHidden(false)
-                canSelectVideo = true
             } else {
                 toggleHighQualityButtonHidden(false)
-                canSelectVideo = true
             }
             
             selectedAssets.append(asset)
             selectedIndexPaths.append(indexPath)
             
-            canSelectImage = !isMaximumSelectionReached()
-            
+            canSelectVideo = false
+            canSelectImage = asset.mediaType == .video ? false : !isMaximumSelectionReached()
+
             lastSelectItemIndexPath = indexPath
             
             updateDisableCells()
@@ -493,7 +491,7 @@ extension AssetsViewController {
             selectedAssets.remove(at: index)
             selectedIndexPaths.remove(at: index)
             lastSelectItemIndexPath = nil
-            canSelectVideo = true
+            canSelectVideo = selectedAssets.count == 0
             canSelectImage = true
             updateDisableCells()
             updateToolBar()
