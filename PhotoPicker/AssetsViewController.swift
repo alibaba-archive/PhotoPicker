@@ -509,7 +509,7 @@ extension AssetsViewController {
     
         let asset = assetsFetchResults[indexPath.item]
      
-        if asset.mediaType == .audio, !canSelectVideo {
+        if asset.mediaType == .video, !canSelectVideo {
             return false
         }
 
