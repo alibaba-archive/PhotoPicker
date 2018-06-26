@@ -211,10 +211,6 @@ extension AssetsViewController {
         navigationController?.toolbar.tintColor = themeToolBarTintColor
         navigationController?.setToolbarHidden(false, animated: true)
     }
-
-    func toggleHighQualityButtonHidden(_ hidden: Bool) {
-        toolbarHighQualityButton.isHidden = hidden
-    }
     
     func updateToolBar() {
         guard photoPickerController.allowMultipleSelection else { return }
@@ -459,12 +455,8 @@ extension AssetsViewController {
         if photoPickerController.allowMultipleSelection {
             if asset.mediaType == .video {
                 clearSelectedCell(at: indexPath)
-                toggleHighQualityButtonHidden(true)
             } else if isVideoAsset(lastSelectItemIndexPath) {
                 clearSelectedCell(at: indexPath)
-                toggleHighQualityButtonHidden(false)
-            } else {
-                toggleHighQualityButtonHidden(false)
             }
             
             selectedAssets.append(asset)
