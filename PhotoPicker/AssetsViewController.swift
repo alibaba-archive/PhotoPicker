@@ -146,12 +146,13 @@ class AssetsViewController: UICollectionViewController {
             highQualityButton.assetsViewController = self
             highQualityButton.checked = self.toolbarHighQualityButton.checked
             if highQualityButton.checked {
-                highQualityButton.highqualityImageSize = self.getImageSize(at: photoBrowser.currentIndex)
+                highQualityButton.highqualityImageSize = getMediaSize(at: photoBrowser.currentIndex)
             }
-            highQualityButton.action = { (checked) in
-                self.toolbarHighQualityButton.checked = checked
+            highQualityButton.action = { [weak self] (checked) in
+                guard let strongSelf = self else { return }
+                strongSelf.toolbarHighQualityButton.checked = checked
                 if checked {
-                    highQualityButton.highqualityImageSize = self.getImageSize(at: photoBrowser.currentIndex)
+                    highQualityButton.highqualityImageSize = strongSelf.getMediaSize(at: photoBrowser.currentIndex)
                 }
             }
             photoBrowserHighQualityButton = highQualityButton
@@ -221,29 +222,53 @@ extension AssetsViewController {
     func updateHighQualityImageSize() {
         guard toolbarHighQualityButton.checked else { return }
         var size: Int = 0
-        selectedAssets.forEach { (asset) -> () in
+        selectedAssets.forEach {
+            size += getMediaSize($0)
+        }
+        toolbarHighQualityButton.highqualityImageSize = size
+    }
+    
+    func getMediaSize(_ asset: PHAsset) -> Int {
+        var size = 0
+        let semaphore = DispatchSemaphore(value: 0)
+        if asset.mediaType == .video {
+            let options = PHVideoRequestOptions()
+            options.version = .current
+            options.deliveryMode = .automatic
+            PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { (avasset, _, info) in
+                func fileSize(_ url: URL?) -> Int? {
+                    do {
+                        guard let fileSize = try url?.resourceValues(forKeys: [.fileSizeKey]).fileSize else { return nil }
+                        return fileSize
+                    }catch { return nil }
+                }
+                var url: URL? = nil
+                if let urlAsset = avasset as? AVURLAsset {
+                    url = urlAsset.url
+                } else if let sandboxKeys = info?["PHImageFileSandboxExtensionTokenKey"] as? String, let path = sandboxKeys.components(separatedBy: ";").last {
+                    url = URL(fileURLWithPath: path)
+                }
+                size = fileSize(url) ?? 0
+                semaphore.signal()
+            }
+            
+        } else {
             let options = PHImageRequestOptions()
             options.isSynchronous = true
             PHImageManager.default().requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) -> Void in
                 if let data = imageData {
-                    size += data.count
+                    size = data.count
                 }
+                semaphore.signal()
             })
         }
-        self.toolbarHighQualityButton.highqualityImageSize = size
-    }
-
-    func getImageSize(at index: Int) -> Int {
-        var size: Int = 0
-        let asset = assetsFetchResults[index]
-        let options = PHImageRequestOptions()
-        options.isSynchronous = true
-        PHImageManager.default().requestImageData(for: asset, options: options, resultHandler: { (imageData, dataUTI, orientation, info) -> Void in
-            if let data = imageData {
-                size += data.count
-            }
-        })
+        _ = semaphore.wait(timeout: .distantFuture)
         return size
+    }
+    
+    func getMediaSize(at index: Int) -> Int {
+        let assert = assetsFetchResults[index]
+        return getMediaSize(assert)
     }
 
     func isVideoAsset(_ indexPath: IndexPath?) -> Bool {
@@ -593,7 +618,7 @@ extension AssetsViewController: PhotoBrowserDelegate {
 
     func photoBrowser(_ browser: PhotoBrowser, didShowPhotoAtIndex index: Int) {
         if let button = photoBrowserHighQualityButton, button.checked {
-            button.highqualityImageSize = getImageSize(at: index)
+            button.highqualityImageSize = getMediaSize(at: index)
         }
         
         guard index == browser.currentIndex else {
