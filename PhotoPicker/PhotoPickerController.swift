@@ -47,10 +47,10 @@ open class PhotoPickerController: UIViewController {
         let storyboard = UIStoryboard(name: "PhotoPicker", bundle: currentBundle)
         let navigationController: UINavigationController = storyboard.instantiateViewController(withIdentifier: "AlbumsNavigationController") as! UINavigationController
         
-        addChildViewController(navigationController)
+        addChild(navigationController)
         navigationController.view.frame = view.bounds
         view.addSubview(navigationController.view)
-        navigationController.didMove(toParentViewController: self)
+        navigationController.didMove(toParent: self)
         
         albumsNavigationController = navigationController
     }

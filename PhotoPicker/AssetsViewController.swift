@@ -67,7 +67,7 @@ class AssetsViewController: UICollectionViewController {
         collectionView?.allowsMultipleSelection = photoPickerController.allowMultipleSelection
         collectionView?.reloadData()
 
-        if assetsFetchResults.count > 0 && isMovingToParentViewController {
+        if assetsFetchResults.count > 0 && isMovingToParent {
             let indexPath = IndexPath(item: assetsFetchResults.count - 1, section: 0)
             collectionView?.layoutIfNeeded()
             collectionView?.scrollToItem(at: indexPath, at: .top, animated: false)
@@ -115,7 +115,7 @@ class AssetsViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionElementKindSectionFooter {
+        if kind == UICollectionView.elementKindSectionFooter {
             let footerView: UICollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: assetFooterViewIdentifier, for: indexPath)
             let numberOfPhotos = assetsFetchResults.countOfAssets(with: .image)
             let numberOfVideos = assetsFetchResults.countOfAssets(with: .video)
@@ -554,7 +554,7 @@ extension AssetsViewController: PHPhotoLibraryChangeObserver {
         
         DispatchQueue.main.async { [weak self]() -> Void in
             guard let strongSelf = self else { return }
-            strongSelf.assetsFetchResults = collectionChanges.fetchResultAfterChanges as! PHFetchResult<PHAsset>
+            strongSelf.assetsFetchResults = collectionChanges.fetchResultAfterChanges as? PHFetchResult<PHAsset>
             
             if collectionChanges.hasIncrementalChanges || collectionChanges.hasMoves {
                 strongSelf.collectionView?.reloadData()
