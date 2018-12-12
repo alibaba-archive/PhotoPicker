@@ -18,6 +18,13 @@ class AssetCell: UICollectionViewCell {
     @IBOutlet weak var videoIndicatorView: VideoIndicatorView!
     fileprivate var checkHandler: ((_ checked: Bool) -> Bool)?
 
+    lazy var progressView: CircularProgressView = {
+        let progressView = CircularProgressView(frame: .zero)
+        progressView.setCircleStrokeWidth(5)
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        return progressView
+    }()
+    
     var checked: Bool = false
     
     var isDisabled: Bool = false {
@@ -25,9 +32,18 @@ class AssetCell: UICollectionViewCell {
             disableView.isHidden = !isDisabled
         }
     }
-    
+        
     override func awakeFromNib() {
         super.awakeFromNib()
+        imageView.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+        checkMarkImageView.tintColor = themeToolBarTintColor
+
+        addSubview(progressView)
+        progressView.leftAnchor.constraint(equalTo: checkMarkImageView.leftAnchor).isActive = true
+        progressView.rightAnchor.constraint(equalTo: checkMarkImageView.rightAnchor).isActive = true
+        progressView.topAnchor.constraint(equalTo: checkMarkImageView.topAnchor).isActive = true
+        progressView.bottomAnchor.constraint(equalTo: checkMarkImageView.bottomAnchor).isActive = true
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler(_:)))
         tapGestureView.isUserInteractionEnabled = true
         tapGestureView.addGestureRecognizer(tapGesture)
@@ -37,6 +53,8 @@ class AssetCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         checkHandler = nil
+        imageView.image = nil
+        progressView.isHidden = true
     }
 
     @objc func tapGestureHandler(_ recognizer: UIGestureRecognizer) {

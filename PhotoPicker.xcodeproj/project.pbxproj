@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A100447E1ECDAE640050A8F0 /* PhotoPickerThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100447D1ECDAE640050A8F0 /* PhotoPickerThemeManager.swift */; };
+		AC2A494E21AAF46000F1CF46 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2A494D21AAF45F00F1CF46 /* CircleProgressView.swift */; };
 		EB15452E1C856C920055715B /* ToolBarHighQualityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB15452D1C856C920055715B /* ToolBarHighQualityButton.swift */; };
 		EB3E4A611C8031D800175777 /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E4A601C8031D800175777 /* AssetCell.swift */; };
 		EB3E4A651C8036E200175777 /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E4A641C8036E200175777 /* AssetsViewController.swift */; };
@@ -30,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		A100447D1ECDAE640050A8F0 /* PhotoPickerThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerThemeManager.swift; sourceTree = "<group>"; };
+		AC2A494D21AAF45F00F1CF46 /* CircleProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleProgressView.swift; sourceTree = "<group>"; };
 		EB15452D1C856C920055715B /* ToolBarHighQualityButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolBarHighQualityButton.swift; sourceTree = "<group>"; };
 		EB3E4A601C8031D800175777 /* AssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
 		EB3E4A641C8036E200175777 /* AssetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetsViewController.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				EBCD67331C843E8600146FDB /* ToolBarNumberView.swift */,
 				EB15452D1C856C920055715B /* ToolBarHighQualityButton.swift */,
 				EBD4A7621D1927E1003280BF /* VideoIndicatorView.swift */,
+				AC2A494D21AAF45F00F1CF46 /* CircleProgressView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -241,6 +244,7 @@
 				EBD4A7631D1927E1003280BF /* VideoIndicatorView.swift in Sources */,
 				EBA70B0D1C7ED91E0089ECD7 /* PhotoPickerController.swift in Sources */,
 				A100447E1ECDAE640050A8F0 /* PhotoPickerThemeManager.swift in Sources */,
+				AC2A494E21AAF46000F1CF46 /* CircleProgressView.swift in Sources */,
 				EBA70B091C7ED6D60089ECD7 /* AlbumCell.swift in Sources */,
 				EBA70B101C7EDB3F0089ECD7 /* PhotoPickerProtocol.swift in Sources */,
 				EB15452E1C856C920055715B /* ToolBarHighQualityButton.swift in Sources */,
