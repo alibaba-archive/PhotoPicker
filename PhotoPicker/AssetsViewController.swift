@@ -164,7 +164,7 @@ class AssetsViewController: UICollectionViewController {
                     return
                 }
                 strongCell.checkMarkImageView.isHidden = true
-                strongSelf.sendBarItem.isEnabled = false
+                strongSelf.sendBarItem?.isEnabled = false
                 strongCell.progressView.progress = CGFloat(progress)
             }
         }
@@ -176,7 +176,7 @@ class AssetsViewController: UICollectionViewController {
             strongSelf.totalDownloadAssetCount -= 1
             strongCell.checkMarkImageView.isHidden = false
             strongCell.progressView.isHidden = true
-            strongSelf.sendBarItem.isEnabled = (strongSelf.selectedAssets.count != 0) && (strongSelf.totalDownloadAssetCount == 0)
+            strongSelf.sendBarItem?.isEnabled = (!strongSelf.selectedAssets.isEmpty) && (strongSelf.totalDownloadAssetCount == 0)
             completion()
         }
     }
@@ -267,7 +267,7 @@ extension AssetsViewController {
     
     func updateToolBar() {
         guard photoPickerController.allowMultipleSelection else { return }
-        sendBarItem.isEnabled = (selectedAssets.count != 0)
+        sendBarItem?.isEnabled = (selectedAssets.count != 0)
         toolbarNumberView.number = selectedAssets.count
     }
     
