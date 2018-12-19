@@ -146,8 +146,8 @@ class AssetsViewController: UICollectionViewController {
             return
         }
         
-        downloadOriginImage(for: cell, indexPath: indexPath) {
-            self.showPhotoBrowser(for: indexPath)
+        downloadOriginImage(for: cell, indexPath: indexPath) { [weak self] in
+            self?.showPhotoBrowser(for: indexPath)
         }
     }
     
@@ -196,10 +196,13 @@ class AssetsViewController: UICollectionViewController {
             if highQualityButton.checked {
                 highQualityButton.highqualityImageSize = self.getImageSize(at: photoBrowser.currentIndex)
             }
-            highQualityButton.action = { (checked) in
-                self.toolbarHighQualityButton.checked = checked
+            highQualityButton.action = { [weak self] (checked) in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.toolbarHighQualityButton.checked = checked
                 if checked {
-                    highQualityButton.highqualityImageSize = self.getImageSize(at: photoBrowser.currentIndex)
+                    highQualityButton.highqualityImageSize = strongSelf.getImageSize(at: photoBrowser.currentIndex)
                 }
             }
             photoBrowserHighQualityButton = highQualityButton
@@ -319,7 +322,9 @@ extension AssetsViewController {
                                   targetSize: targetSize,
                                   contentMode: .aspectFill,
                                   options: thumbnailRequestOptions) { (image, info) -> Void in
-                                    guard let image = image , cell.tag == indexPath.item else { return }
+                                    guard let image = image , cell.tag == indexPath.item else {
+                                        return
+                                    }
                                     cell.imageView.image = image
         }
         
@@ -591,7 +596,7 @@ extension AssetsViewController: UICollectionViewDelegateFlowLayout {
             numberOfColumns = AssetsNumberOfColumns.LandscapePhone
         }
         
-        let containerViewWidth = photoPickerController.view.frame.width
+        let containerViewWidth = self.view.frame.width
         let width: CGFloat = floor((containerViewWidth - 2.0 * CGFloat(numberOfColumns - 1)) / CGFloat(numberOfColumns))
         return CGSize(width: width, height: width)
     }
@@ -635,7 +640,7 @@ extension AssetsViewController: PHPhotoLibraryChangeObserver {
                 if shouldReload {
                     strongSelf.collectionView.reloadData()
                 } else {
-                    strongSelf.collectionView.performBatchUpdates({
+                    strongSelf.collectionView.performBatchUpdates({ [weak self] in
                         guard let strongSelf = self else {
                             return
                         }
@@ -648,7 +653,10 @@ extension AssetsViewController: PHPhotoLibraryChangeObserver {
                         if let changedIndexPaths = changedIndexPaths, !changedIndexPaths.isEmpty {
                             strongSelf.collectionView?.reloadItems(at: changedIndexPaths)
                         }
-                    }, completion: { (finished) in
+                    }, completion: { [weak self] (finished) in
+                        guard let strongSelf = self else {
+                            return
+                        }
                         if finished {
                             strongSelf.resetCachedAssets()
                         }
