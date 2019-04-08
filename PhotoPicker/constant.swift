@@ -49,6 +49,8 @@ var currentOrientation: PhotoPickerOrientation {
             orientation = .portrait
         case .landscapeLeft, .landscapeRight:
             orientation = .landscape
+        @unknown default:
+            orientation = .portrait
         }
         return orientation
     }
