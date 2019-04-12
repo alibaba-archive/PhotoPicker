@@ -2,14 +2,14 @@
 A image picker for iOS , written by Swift.
 
 
-##How To Get Started
-###Carthage
+## How To Get Started
+### Carthage
 Specify "PhotoPicker" in your Cartfile:
 ```
 github "teambition/PhotoPicker"
 ```
 
-###Usage
+### Usage
 ##### configuration  properties
 ```
 // use this to fetch what type album you want
