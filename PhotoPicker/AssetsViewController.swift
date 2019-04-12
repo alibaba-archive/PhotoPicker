@@ -541,7 +541,7 @@ extension AssetsViewController {
     func deselectItemAtIndexPath(_ indexPath: IndexPath, uncheckCell: Bool) {
         guard photoPickerController.allowMultipleSelection else { return }
         let asset = assetsFetchResults[indexPath.item]
-        if let index = selectedAssets.index(of: asset) {
+        if let index = selectedAssets.firstIndex(of: asset) {
             selectedAssets.remove(at: index)
             selectedIndexPaths.remove(at: index)
             lastSelectItemIndexPath = nil

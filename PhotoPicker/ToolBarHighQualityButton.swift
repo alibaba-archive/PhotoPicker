@@ -80,11 +80,11 @@ class ToolBarHighQualityButton: UIView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        let views = ["imageView":imageView, "titleLabel":titleLabel] as [String : Any]
+        let views = ["imageView": imageView!, "titleLabel": titleLabel!] as [String : Any]
         let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView(==imageViewWidth)]-5-[titleLabel]|", options: [], metrics: ["imageViewWidth": imageViewWidth], views: views)
-        let imageViewHeight = NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: imageViewWidth)
-        let imageViewCenterY = NSLayoutConstraint(item: imageView, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1.0, constant: 0.0)
-        let titleLabelCenterY = NSLayoutConstraint(item: titleLabel, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1.0, constant: 0.0)
+        let imageViewHeight = NSLayoutConstraint(item: imageView!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: imageViewWidth)
+        let imageViewCenterY = NSLayoutConstraint(item: imageView!, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1.0, constant: 0.0)
+        let titleLabelCenterY = NSLayoutConstraint(item: titleLabel!, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1.0, constant: 0.0)
         let constraints = [imageViewHeight, imageViewCenterY, titleLabelCenterY]
         
         NSLayoutConstraint.activate(horizontalConstraints + constraints)
