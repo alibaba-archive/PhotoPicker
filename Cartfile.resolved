@@ -1,4 +1,4 @@
 github "Quick/Nimble" "v8.0.1"
 github "Quick/Quick" "v2.0.0"
 github "onevcat/Kingfisher" "5.3.1"
-github "teambition/PhotoBrowser" "feature/support-swift5"
+github "teambition/PhotoBrowser" "0.13.0"
