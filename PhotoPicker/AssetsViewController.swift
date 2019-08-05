@@ -113,14 +113,16 @@ class AssetsViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: AssetCell = collectionView.dequeueReusableCell(withReuseIdentifier: assetCellIdentifier, for: indexPath) as! AssetCell
         fillCell(cell, forIndexPath: indexPath)
-        cell.addCheckHandler { [weak self] (checked) -> Bool in
-            guard let strongSelf = self , strongSelf.shouldSelectItemAtIndexPath(indexPath, checked: checked) else { return false }
-            if !checked {
-                strongSelf.selectItemAtIndexPath(indexPath)
-            } else {
-                strongSelf.deselectItemAtIndexPath(indexPath, uncheckCell: false)
+        cell.addCheckHandler { [weak self, weak cell] (checked) -> Bool in
+            guard let self = self, let cell = cell, self.shouldSelectItemAtIndexPath(indexPath, checked: checked) else {
+                return false
             }
-            strongSelf.downloadOriginImage(for: cell, indexPath: indexPath, completion: {})
+            if !checked {
+                self.selectItemAtIndexPath(indexPath)
+            } else {
+                self.deselectItemAtIndexPath(indexPath, uncheckCell: false)
+            }
+            self.downloadOriginImage(for: cell, indexPath: indexPath, completion: {})
             return true
         }
         return cell
@@ -196,13 +198,13 @@ class AssetsViewController: UICollectionViewController {
             if highQualityButton.checked {
                 highQualityButton.highqualityImageSize = self.getImageSize(at: photoBrowser.currentIndex)
             }
-            highQualityButton.action = { [weak self] (checked) in
-                guard let strongSelf = self else {
+            highQualityButton.action = { [weak self, weak highQualityButton, weak photoBrowser] (checked) in
+                guard let self = self, let highQualityButton = highQualityButton, let photoBrowser = photoBrowser else {
                     return
                 }
-                strongSelf.toolbarHighQualityButton.checked = checked
+                self.toolbarHighQualityButton.checked = checked
                 if checked {
-                    highQualityButton.highqualityImageSize = strongSelf.getImageSize(at: photoBrowser.currentIndex)
+                    highQualityButton.highqualityImageSize = self.getImageSize(at: photoBrowser.currentIndex)
                 }
             }
             photoBrowserHighQualityButton = highQualityButton
