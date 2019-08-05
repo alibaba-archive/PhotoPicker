@@ -10,8 +10,8 @@ import UIKit
 
 let imageViewWidth: CGFloat = 18
 typealias HighQualityButtonAction = (Bool) -> Void
+
 class ToolBarHighQualityButton: UIView {
-    
     weak var assetsViewController: AssetsViewController!
     
     //MARK: - public property
