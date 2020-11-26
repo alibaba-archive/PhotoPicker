@@ -13,6 +13,7 @@ class AlbumsViewController: UITableViewController {
     
     //MARK: - public property
     weak var photoPickerController: PhotoPickerController!
+    var highQualityImageByDefault: Bool = false
     
     //MARK: - private property
     fileprivate var fetchedResults: [PHFetchResult<PHAssetCollection>] = []
@@ -65,6 +66,7 @@ class AlbumsViewController: UITableViewController {
         if let assetsViewController = segue.destination as? AssetsViewController {
             assetsViewController.photoPickerController = photoPickerController
             assetsViewController.assetCollection = assetCollections[tableView.indexPathForSelectedRow!.row]
+            assetsViewController.highQualityImageByDefault = highQualityImageByDefault
         }
     }
 }

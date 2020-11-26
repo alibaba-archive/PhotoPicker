@@ -23,7 +23,7 @@ open class PhotoPickerController: UIViewController {
     //MARK: - private property
     fileprivate var albumsNavigationController: UINavigationController!
     
-    public init(localizedStrings: [String: String]) {
+    public init(localizedStrings: [String: String], highQualityImageByDefault: Bool = false) {
         super.init(nibName:nil, bundle:nil)
         
         self.assetCollectionSubtypes = [.smartAlbumUserLibrary,
@@ -41,6 +41,7 @@ open class PhotoPickerController: UIViewController {
         
         let albumsViewController = albumsNavigationController.topViewController as! AlbumsViewController
         albumsViewController.photoPickerController = self
+        albumsViewController.highQualityImageByDefault = highQualityImageByDefault
     }
     
     func setupAlbumsViewController() {

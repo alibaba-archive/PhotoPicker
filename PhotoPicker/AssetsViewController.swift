@@ -15,6 +15,8 @@ class AssetsViewController: UICollectionViewController {
     
     //MARK: - public property
     weak var photoPickerController: PhotoPickerController!
+    var highQualityImageByDefault: Bool = false
+
     var selectedAssets: [PHAsset] = [] {
         didSet {
             updateHighQualityImageSize()
@@ -255,6 +257,9 @@ extension AssetsViewController {
         toolbarNumberView = ToolBarNumberView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 21.0, height: 21.0)))
         toolbarHighQualityButton = ToolBarHighQualityButton(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 150, height: 21.0)))
         toolbarHighQualityButton.assetsViewController = self
+        if highQualityImageByDefault {
+            toolbarHighQualityButton.checked = true
+        }
         
         sendBarItem = UIBarButtonItem(title: localizedString["PhotoPicker.Send"], style: .plain, target: self, action: #selector(AssetsViewController.sendButtonTapped))
         sendBarItem.isEnabled = false
