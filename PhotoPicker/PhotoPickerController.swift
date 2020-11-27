@@ -15,6 +15,7 @@ open class PhotoPickerController: UIViewController {
     open weak var delegate: PhotoPickerDelegate?
     open var assetCollectionSubtypes: [PHAssetCollectionSubtype]?
     open var allowMultipleSelection: Bool = true
+    open var enableVideoMultipleSelection: Bool = false
     open var minimumNumberOfSelection: Int = 1
     open var maximumNumberOfSelection: Int = 9
     open var mediaType: PhotoPickerMediaType = .any

@@ -519,7 +519,9 @@ extension AssetsViewController {
         
         if photoPickerController.allowMultipleSelection {
             if asset.mediaType == .video {
-                clearSelectedCell(at: indexPath)
+                if !photoPickerController.enableVideoMultipleSelection {
+                    clearSelectedCell(at: indexPath)
+                }
                 toggleHighQualityButtonHidden(true)
             } else if isVideoAsset(lastSelectItemIndexPath) {
                 clearSelectedCell(at: indexPath)
@@ -531,7 +533,11 @@ extension AssetsViewController {
             selectedAssets.append(asset)
             selectedIndexPaths.append(indexPath)
             
-            canSelectVideo = false
+            if photoPickerController.enableVideoMultipleSelection {
+                canSelectVideo = asset.mediaType == .image ? false : !isMaximumSelectionReached()
+            } else {
+                canSelectVideo = false
+            }
             canSelectImage = asset.mediaType == .video ? false : !isMaximumSelectionReached()
             
             lastSelectItemIndexPath = indexPath
@@ -549,11 +555,17 @@ extension AssetsViewController {
         guard photoPickerController.allowMultipleSelection else { return }
         let asset = assetsFetchResults[indexPath.item]
         if let index = selectedAssets.firstIndex(of: asset) {
+            let asset = selectedAssets[index]
             selectedAssets.remove(at: index)
             selectedIndexPaths.remove(at: index)
             lastSelectItemIndexPath = nil
-            canSelectVideo = selectedAssets.count == 0
-            canSelectImage = true
+            if photoPickerController.enableVideoMultipleSelection && asset.mediaType == .video {
+                canSelectVideo = true
+                canSelectImage = selectedAssets.count == 0
+            } else {
+                canSelectVideo = selectedAssets.count == 0
+                canSelectImage = true
+            }
             updateDisableCells()
             updateToolBar()
             photoPickerController.delegate?.photoPickerController(photoPickerController, didDeselectAsset: asset)
