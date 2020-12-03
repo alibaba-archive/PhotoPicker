@@ -561,9 +561,9 @@ extension AssetsViewController {
             lastSelectItemIndexPath = nil
             if photoPickerController.enableVideoMultipleSelection && asset.mediaType == .video {
                 canSelectVideo = true
-                canSelectImage = selectedAssets.count == 0
+                canSelectImage = selectedAssets.isEmpty
             } else {
-                canSelectVideo = selectedAssets.count == 0
+                canSelectVideo = selectedAssets.isEmpty
                 canSelectImage = true
             }
             updateDisableCells()
