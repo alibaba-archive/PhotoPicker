@@ -15,6 +15,7 @@ open class PhotoPickerController: UIViewController {
     open weak var delegate: PhotoPickerDelegate?
     open var assetCollectionSubtypes: [PHAssetCollectionSubtype]?
     open var allowMultipleSelection: Bool = true
+    open var enableVideoMultipleSelection: Bool = false
     open var minimumNumberOfSelection: Int = 1
     open var maximumNumberOfSelection: Int = 9
     open var mediaType: PhotoPickerMediaType = .any
@@ -23,7 +24,7 @@ open class PhotoPickerController: UIViewController {
     //MARK: - private property
     fileprivate var albumsNavigationController: UINavigationController!
     
-    public init(localizedStrings: [String: String]) {
+    public init(localizedStrings: [String: String], highQualityImageByDefault: Bool = false) {
         super.init(nibName:nil, bundle:nil)
         
         self.assetCollectionSubtypes = [.smartAlbumUserLibrary,
@@ -41,6 +42,7 @@ open class PhotoPickerController: UIViewController {
         
         let albumsViewController = albumsNavigationController.topViewController as! AlbumsViewController
         albumsViewController.photoPickerController = self
+        albumsViewController.highQualityImageByDefault = highQualityImageByDefault
     }
     
     func setupAlbumsViewController() {

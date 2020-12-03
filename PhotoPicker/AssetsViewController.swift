@@ -15,6 +15,8 @@ class AssetsViewController: UICollectionViewController {
     
     //MARK: - public property
     weak var photoPickerController: PhotoPickerController!
+    var highQualityImageByDefault: Bool = false
+
     var selectedAssets: [PHAsset] = [] {
         didSet {
             updateHighQualityImageSize()
@@ -255,6 +257,9 @@ extension AssetsViewController {
         toolbarNumberView = ToolBarNumberView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 21.0, height: 21.0)))
         toolbarHighQualityButton = ToolBarHighQualityButton(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 150, height: 21.0)))
         toolbarHighQualityButton.assetsViewController = self
+        if highQualityImageByDefault {
+            toolbarHighQualityButton.checked = true
+        }
         
         sendBarItem = UIBarButtonItem(title: localizedString["PhotoPicker.Send"], style: .plain, target: self, action: #selector(AssetsViewController.sendButtonTapped))
         sendBarItem.isEnabled = false
@@ -514,7 +519,9 @@ extension AssetsViewController {
         
         if photoPickerController.allowMultipleSelection {
             if asset.mediaType == .video {
-                clearSelectedCell(at: indexPath)
+                if !photoPickerController.enableVideoMultipleSelection {
+                    clearSelectedCell(at: indexPath)
+                }
                 toggleHighQualityButtonHidden(true)
             } else if isVideoAsset(lastSelectItemIndexPath) {
                 clearSelectedCell(at: indexPath)
@@ -526,7 +533,11 @@ extension AssetsViewController {
             selectedAssets.append(asset)
             selectedIndexPaths.append(indexPath)
             
-            canSelectVideo = false
+            if photoPickerController.enableVideoMultipleSelection {
+                canSelectVideo = asset.mediaType == .image ? false : !isMaximumSelectionReached()
+            } else {
+                canSelectVideo = false
+            }
             canSelectImage = asset.mediaType == .video ? false : !isMaximumSelectionReached()
             
             lastSelectItemIndexPath = indexPath
@@ -544,11 +555,17 @@ extension AssetsViewController {
         guard photoPickerController.allowMultipleSelection else { return }
         let asset = assetsFetchResults[indexPath.item]
         if let index = selectedAssets.firstIndex(of: asset) {
+            let asset = selectedAssets[index]
             selectedAssets.remove(at: index)
             selectedIndexPaths.remove(at: index)
             lastSelectItemIndexPath = nil
-            canSelectVideo = selectedAssets.count == 0
-            canSelectImage = true
+            if photoPickerController.enableVideoMultipleSelection && asset.mediaType == .video {
+                canSelectVideo = true
+                canSelectImage = selectedAssets.isEmpty
+            } else {
+                canSelectVideo = selectedAssets.isEmpty
+                canSelectImage = true
+            }
             updateDisableCells()
             updateToolBar()
             photoPickerController.delegate?.photoPickerController(photoPickerController, didDeselectAsset: asset)
